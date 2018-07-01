@@ -4,6 +4,7 @@
 
 {
   imports = [
+    ./base-nixos.nix
     ./desktop-plasma5.nix
     ./fonts.nix
   ];
