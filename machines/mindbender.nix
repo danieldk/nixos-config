@@ -44,6 +44,8 @@
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   programs.vim.defaultEditor = true;
+  programs.zsh.enable = true;
+  programs.zsh.enableCompletion = true;
 
   # List services that you want to enable:
 
@@ -65,36 +67,10 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-  services.xserver = {
-    enable = true;
-    dpi = 180;
-    desktopManager = {
-      plasma5.enable = true;
-    };
-    displayManager = {
-      sddm.enable = true;
-    };
-  };
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
-  #   isNormalUser = true;
-  #   uid = 1000;
-  # };
   users.extraUsers.daniel = {
     createHome = true;
     home = "/home/daniel";
+    shell = pkgs.zsh;
     extraGroups = [ "wheel" ];
     isNormalUser = true;
   };
