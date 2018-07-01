@@ -21,6 +21,8 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.enableUnstable = true;
 
+  networking.hostName = "mindbender";
+
   # Select internationalisation properties.
   # i18n = {
   #   consoleFont = "Lat2-Terminus16";
