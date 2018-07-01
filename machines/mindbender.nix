@@ -15,7 +15,10 @@
     allowUnfree = true;
   };
 
-  # Use the systemd-boot EFI boot loader.
+  boot.kernelParams = [
+    "radeon.si_support=0"
+    "amdgpu.si_support=1"
+  ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; 
   boot.supportedFilesystems = [ "zfs" ];
