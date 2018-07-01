@@ -35,7 +35,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim home-manager
+    home-manager
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -43,6 +43,7 @@
   programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.vim.defaultEditor = true;
 
   # List services that you want to enable:
 
