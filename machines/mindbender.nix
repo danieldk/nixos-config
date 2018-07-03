@@ -15,6 +15,7 @@
     allowUnfree = true;
   };
 
+  boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
   boot.kernelParams = [
     "radeon.si_support=0"
     "amdgpu.si_support=1"
@@ -25,6 +26,7 @@
   boot.zfs.enableUnstable = true;
 
   networking.hostName = "mindbender";
+  networking.networkmanager.enable = true;
 
   i18n = {
   #   consoleFont = "Lat2-Terminus16";
