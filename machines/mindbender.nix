@@ -48,21 +48,18 @@
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
 
-  # List services that you want to enable:
+  # Services
 
-  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
   services.pcscd.enable = true;
+  services.printing.enable = true;
+  services.zfs.autoScrub.enable = true;
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
