@@ -16,6 +16,9 @@
     };
   };
 
+  environment.systemPackages = with pkgs; [
+    korganizer
+  ];
   
   environment.etc."wayland/plasma-wayland.desktop".text = ''
     [Desktop Entry]
