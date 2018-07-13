@@ -9,6 +9,8 @@
     fonts = with pkgs; [
       corefonts
       google-fonts
+      noto-fonts
+      noto-fonts-emoji
       source-code-pro
     ];
   };
