@@ -4,7 +4,9 @@
 
 { config, pkgs, ... }:
 
-{
+let
+  unstable = import <nixos-unstable> {};
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -20,6 +22,7 @@
     "radeon.si_support=0"
     "amdgpu.si_support=1"
   ];
+  boot.kernelPackages = unstable.linuxPackages_latest;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; 
   boot.supportedFilesystems = [ "zfs" ];
