@@ -67,9 +67,10 @@ in {
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Enable sound.
+  # Hardware
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+  hardware.u2f.enable = true;
 
   users.extraUsers.daniel = {
     createHome = true;
