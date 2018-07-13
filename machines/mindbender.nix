@@ -45,6 +45,9 @@ in {
   environment.systemPackages = with pkgs; [
   ];
 
+  nix.buildCores = 8;
+  nix.useSandbox = true;
+
   programs.bash.enableCompletion = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   programs.vim.defaultEditor = true;
