@@ -49,6 +49,10 @@
   };
 
   security.acme.certs = {
+    "arch.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
     "danieldk.eu" = {
       extraDomains = { "www.danieldk.eu" = null; };
       email = "me@danieldk.eu";
@@ -115,6 +119,9 @@
 
     virtualHosts."arch.danieldk.eu" = {
       serverName = "arch.danieldk.eu";
+      forceSSL = true;
+      enableACME = true;
+      extraConfig = "autoindex on;";
       root = "/srv/www/arch.danieldk.eu";
     };
 
