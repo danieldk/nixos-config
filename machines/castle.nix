@@ -41,6 +41,11 @@
       extraDomains = { "www.ljdekok.com" = null; };
       email = "me@danieldk.eu";
     };
+
+    "plantsulfur.org" = {
+      extraDomains = { "www.plantsulfur.org" = null; };
+      email = "me@danieldk.eu";
+    };
   };
 
   services.openssh.enable = true;
@@ -111,7 +116,10 @@
 
     virtualHosts."plantsulfur.org" = {
       serverName = "plantsulfur.org";
+      serverAliases = [ "www.plantsulfur.org" ];
       root = "/srv/www/plantsulfur.org/htdocs";
+      forceSSL = true;
+      enableACME = true;
       locations = {
         "/" = {
           extraConfig = ''
