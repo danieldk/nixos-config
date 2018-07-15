@@ -59,6 +59,10 @@
       email = "me@danieldk.eu";
     };
 
+    "elaml.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
     "flatpak.danieldk.eu" = {
       email = "me@danieldk.eu";
     };
@@ -92,6 +96,13 @@
       forceSSL = true;
       enableACME = true;
       root = "/srv/www/danieldk.eu";
+    };
+
+    virtualHosts."elaml.danieldk.eu" = {
+      serverName = "elaml.danieldk.eu";
+      forceSSL = true;
+      enableACME = true;
+      root = "/srv/www/elaml.danieldk.eu";
     };
 
     virtualHosts."flatpak.danieldk.eu" = {
