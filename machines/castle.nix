@@ -1,6 +1,27 @@
 { config, lib, pkgs, ... }:
 
 {
+  boot.kernelPackages = pkgs.linuxPackages_hardened;
+
+  # Kernel hardening.
+  boot.kernelParams = [
+    # Overwrite free'd memory
+    "page_poison=1"
+
+    # Disable legacy virtual syscalls
+    "vsyscall=none"
+
+    # Disable hibernation (allows replacing the running kernel)
+    "nohibernate"
+  ];
+
+  boot.kernel.sysctl."kernel.kexec_load_disabled" = true;
+  boot.kernel.sysctl."kernel.unprivileged_bpf_disabled" = true;
+  boot.kernel.sysctl."net.core.bpf_jit_harden" = true;
+  boot.kernel.sysctl."user.max_user_namespaces" = 0;
+  boot.kernel.sysctl."vm.mmap_rnd_bits" = 32;
+  boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
+
   environment.systemPackages = with pkgs; [
     vim
   ];
@@ -20,6 +41,11 @@
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 22 80 443 ];
+  };
+
+  security = {
+    hideProcessInformation = true;
+    lockKernelModules = true;
   };
 
   security.acme.certs = {
