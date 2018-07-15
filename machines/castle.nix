@@ -33,9 +33,14 @@
       email = "me@danieldk.eu";
     };
 
-    #"flatpak.danieldk.eu" = {
-    #  email = "me@danieldk.eu";
-    #};
+    "flatpak.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
+    "ljdekok.com" = {
+      extraDomains = { "www.ljdekok.com" = null; };
+      email = "me@danieldk.eu";
+    };
   };
 
   services.openssh.enable = true;
@@ -60,8 +65,9 @@
 
     virtualHosts."flatpak.danieldk.eu" = {
       serverName = "flatpak.danieldk.eu";
-      #forceSSL = true;
-      #enableACME = true;
+      forceSSL = true;
+      enableACME = true;
+      extraConfig = "autoindex on;";
       root = "/srv/www/flatpak.danieldk.eu";
     };
 
@@ -78,8 +84,11 @@
       root = "/srv/www/dekok.dk";
     };
 
-    virtualHosts."ljdekok.org" = {
-      serverName = "ljdekok.org";
+    virtualHosts."ljdekok.com" = {
+      serverName = "ljdekok.com";
+      serverAliases = [ "www.ljdekok.com" ];
+      forceSSL = true;
+      enableACME = true;
       root = "/srv/www/ljdekok.org/htdocs";
       locations = {
         "/" = {
