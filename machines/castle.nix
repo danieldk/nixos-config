@@ -94,6 +94,13 @@
       server_names_hash_bucket_size 64;
     '';
 
+    virtualHosts."apgc.eu" = {
+      serverName = "apgc.eu";
+      serverAliases = [ "www.apgc.eu" ];
+      root = "/var/www/html";
+      globalRedirect = "onlinelibrary.wiley.com/doi/full/10.1111/plb.12413";
+    };
+
     virtualHosts."danieldk.eu" = {
       serverName = "danieldk.eu";
       serverAliases = [ "www.danieldk.eu" ];
