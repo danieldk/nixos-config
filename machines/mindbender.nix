@@ -60,6 +60,7 @@ in {
   services.openssh.enable = true;
   services.pcscd.enable = true;
   services.printing.enable = true;
+  services.printing.drivers = [ pkgs.hplip ];
   services.zfs.autoScrub.enable = true;
 
   # Open ports in the firewall.
