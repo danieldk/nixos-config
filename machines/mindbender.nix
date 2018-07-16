@@ -22,7 +22,7 @@ in {
     "radeon.si_support=0"
     "amdgpu.si_support=1"
   ];
-  boot.kernelPackages = unstable.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_4_17;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; 
   boot.supportedFilesystems = [ "zfs" ];
