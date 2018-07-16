@@ -64,7 +64,12 @@ in {
   services.zfs.autoScrub.enable = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall = {
+    enable = true;
+    checkReversePath = false;
+    allowedTCPPorts = [ 22 ];
+    allowedUDPPortRanges = [ { from = 32768; to = 61000; } ];
+  };
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
