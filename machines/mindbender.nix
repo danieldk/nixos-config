@@ -83,9 +83,11 @@ in {
     createHome = true;
     home = "/home/daniel";
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "libvirtd" ];
     isNormalUser = true;
   };
+
+  virtualisation.libvirtd.enable = true;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
