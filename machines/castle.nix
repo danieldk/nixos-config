@@ -23,6 +23,7 @@
   boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
 
   environment.systemPackages = with pkgs; [
+    git
     vim
   ];
 
