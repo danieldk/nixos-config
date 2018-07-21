@@ -1,0 +1,5 @@
+{
+  sid = {
+    deployment.targetEnv = "libvirtd";
+  };
+}
