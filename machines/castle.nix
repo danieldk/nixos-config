@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  secrets = import ../secrets.nix;
+  unstable = import <nixos-unstable> {};
+in {
   boot.kernelPackages = pkgs.linuxPackages_hardened;
 
   # Kernel hardening.
@@ -21,6 +24,12 @@
   boot.kernel.sysctl."user.max_user_namespaces" = 0;
   boot.kernel.sysctl."vm.mmap_rnd_bits" = 32;
   boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
+
+  nixpkgs.config.packageOverrides = pkgs: rec {
+    gitea = unstable.gitea;
+  };
+
+  deployment.keys.psql-gitea.text = secrets.castle_gitea_dbpass;
 
   environment.systemPackages = with pkgs; [
     git
@@ -73,6 +82,10 @@
       email = "me@danieldk.eu";
     };
 
+    "git.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
     "ljdekok.com" = {
       extraDomains = { "www.ljdekok.com" = null; };
       email = "me@danieldk.eu";
@@ -84,8 +97,30 @@
     };
   };
 
+  services.gitea = {
+    enable = true;
+    cookieSecure = true;
+    database.type = "postgres";
+    database.passwordFile = "/run/keys/psql-gitea";
+    domain = "git.danieldk.eu";
+    extraConfig = ''
+      [service]
+      DISABLE_REGISTRATION = true
+      
+      [U2F]
+      APP_ID = https://git.danieldk.eu:443/
+      TRUSTED_FACETS = https://git.danieldk.eu:443/
+    '';
+    httpAddress = "127.0.0.1";
+    rootUrl = "https://git.danieldk.eu/";
+  };
+
   services.openssh.enable = true;
-    
+
+  services.postgresql = {
+    enable = true;
+  };
+   
   services.nginx = {
     enable = true;
     recommendedGzipSettings = true;
@@ -124,6 +159,18 @@
       enableACME = true;
       extraConfig = "autoindex on;";
       root = "/srv/www/flatpak.danieldk.eu";
+    };
+
+    virtualHosts."git.danieldk.eu" = {
+      serverName = "git.danieldk.eu";
+      forceSSL = true;
+      enableACME = true;
+      root = "/var/ww/html";
+      locations = {
+        "/" = {
+          proxyPass = "http://127.0.0.1:3000/";
+        };
+      };
     };
 
     virtualHosts."arch.danieldk.eu" = {
