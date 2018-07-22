@@ -137,110 +137,112 @@ in {
       server_names_hash_bucket_size 64;
     '';
 
-    virtualHosts."apgc.eu" = {
-      serverName = "apgc.eu";
-      serverAliases = [ "www.apgc.eu" ];
-      root = "/var/www/html";
-      globalRedirect = "onlinelibrary.wiley.com/doi/full/10.1111/plb.12413";
-    };
+    virtualHosts = {
+      "apgc.eu" = {
+        serverName = "apgc.eu";
+        serverAliases = [ "www.apgc.eu" ];
+        root = "/var/www/html";
+        globalRedirect = "onlinelibrary.wiley.com/doi/full/10.1111/plb.12413";
+      };
 
-    virtualHosts."danieldk.eu" = {
-      serverName = "danieldk.eu";
-      serverAliases = [ "www.danieldk.eu" ];
-      forceSSL = true;
-      enableACME = true;
-      root = "/srv/www/danieldk.eu";
-    };
+      "danieldk.eu" = {
+        serverName = "danieldk.eu";
+        serverAliases = [ "www.danieldk.eu" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/srv/www/danieldk.eu";
+      };
 
-    virtualHosts."elaml.danieldk.eu" = {
-      serverName = "elaml.danieldk.eu";
-      forceSSL = true;
-      enableACME = true;
-      root = "/srv/www/elaml.danieldk.eu";
-    };
+      "elaml.danieldk.eu" = {
+        serverName = "elaml.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        root = "/srv/www/elaml.danieldk.eu";
+      };
 
-    virtualHosts."flatpak.danieldk.eu" = {
-      serverName = "flatpak.danieldk.eu";
-      forceSSL = true;
-      enableACME = true;
-      extraConfig = "autoindex on;";
-      root = "/srv/www/flatpak.danieldk.eu";
-    };
+      "flatpak.danieldk.eu" = {
+        serverName = "flatpak.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        extraConfig = "autoindex on;";
+        root = "/srv/www/flatpak.danieldk.eu";
+      };
 
-    virtualHosts."git.danieldk.eu" = {
-      serverName = "git.danieldk.eu";
-      forceSSL = true;
-      enableACME = true;
-      root = "/var/ww/html";
-      locations = {
-        "/" = {
-          proxyPass = "http://127.0.0.1:3000/";
+      "git.danieldk.eu" = {
+        serverName = "git.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/ww/html";
+        locations = {
+          "/" = {
+            proxyPass = "http://127.0.0.1:3000/";
+          };
         };
       };
-    };
+    
+      "arch.danieldk.eu" = {
+        serverName = "arch.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        extraConfig = "autoindex on;";
+        root = "/srv/www/arch.danieldk.eu";
+      };
 
-    virtualHosts."arch.danieldk.eu" = {
-      serverName = "arch.danieldk.eu";
-      forceSSL = true;
-      enableACME = true;
-      extraConfig = "autoindex on;";
-      root = "/srv/www/arch.danieldk.eu";
-    };
+      "dekok.dk" = {
+        serverName = "dekok.dk";
+        serverAliases = [ "www.dekok.dk" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/srv/www/dekok.dk";
+      };
 
-    virtualHosts."dekok.dk" = {
-      serverName = "dekok.dk";
-      serverAliases = [ "www.dekok.dk" ];
-      forceSSL = true;
-      enableACME = true;
-      root = "/srv/www/dekok.dk";
-    };
-
-    virtualHosts."ljdekok.com" = {
-      serverName = "ljdekok.com";
-      serverAliases = [ "www.ljdekok.com" ];
-      forceSSL = true;
-      enableACME = true;
-      root = "/srv/www/ljdekok.org/htdocs";
-      locations = {
-        "/" = {
-          extraConfig = ''
-            uwsgi_pass unix:/run/uwsgi/ljdekok.sock;
-            include ${pkgs.nginx}/conf/uwsgi_params;
-          '';
-        };
-        "~ ^/wiki/(.*)" = {
-          alias = "/srv/www/ljdekok.org/htdocs/$1";
-        };
-        "/robots.txt" = {
-          alias = "/srv/www/ljdekok.org/htdocs/robots.txt";
-        };
-        "/favicon.ico" = {
-          alias = "/srv/www/ljdekok.org/htdocs/favicon.ico";
+      "ljdekok.com" = {
+        serverName = "ljdekok.com";
+        serverAliases = [ "www.ljdekok.com" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/srv/www/ljdekok.org/htdocs";
+        locations = {
+          "/" = {
+            extraConfig = ''
+              uwsgi_pass unix:/run/uwsgi/ljdekok.sock;
+              include ${pkgs.nginx}/conf/uwsgi_params;
+            '';
+          };
+          "~ ^/wiki/(.*)" = {
+            alias = "/srv/www/ljdekok.org/htdocs/$1";
+          };
+          "/robots.txt" = {
+            alias = "/srv/www/ljdekok.org/htdocs/robots.txt";
+          };
+          "/favicon.ico" = {
+            alias = "/srv/www/ljdekok.org/htdocs/favicon.ico";
+          };
         };
       };
-    };
 
-    virtualHosts."plantsulfur.org" = {
-      serverName = "plantsulfur.org";
-      serverAliases = [ "www.plantsulfur.org" ];
-      root = "/srv/www/plantsulfur.org/htdocs";
-      forceSSL = true;
-      enableACME = true;
-      locations = {
-        "/" = {
-          extraConfig = ''
-            uwsgi_pass unix:/run/uwsgi/plantsulfur.sock;
-            include ${pkgs.nginx}/conf/uwsgi_params;
-          '';
-        };
-        "~ ^/wiki/(.*)" = {
-          alias = "/srv/www/plantsulfur.org/htdocs/$1";
-        };
-        "/robots.txt" = {
-          alias = "/srv/www/plantsulfur.org/htdocs/robots.txt";
-        };
-        "/favicon.ico" = {
-          alias = "/srv/www/plantsulfur.org/htdocs/favicon.ico";
+      "plantsulfur.org" = {
+        serverName = "plantsulfur.org";
+        serverAliases = [ "www.plantsulfur.org" ];
+        root = "/srv/www/plantsulfur.org/htdocs";
+        forceSSL = true;
+        enableACME = true;
+        locations = {
+          "/" = {
+            extraConfig = ''
+              uwsgi_pass unix:/run/uwsgi/plantsulfur.sock;
+              include ${pkgs.nginx}/conf/uwsgi_params;
+            '';
+          };
+          "~ ^/wiki/(.*)" = {
+            alias = "/srv/www/plantsulfur.org/htdocs/$1";
+          };
+          "/robots.txt" = {
+            alias = "/srv/www/plantsulfur.org/htdocs/robots.txt";
+          };
+          "/favicon.ico" = {
+            alias = "/srv/www/plantsulfur.org/htdocs/favicon.ico";
+          };
         };
       };
     };
