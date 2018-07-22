@@ -3,6 +3,12 @@
 let
   secrets = import ../secrets.nix;
   unstable = import <nixos-unstable> {};
+  danieldk = import (pkgs.fetchFromGitHub {
+    owner = "danieldk";
+    repo = "nixpkgs";
+    rev = "ab425326e99349509795cce8a55dcac799bdfa03";
+    sha256 = "14gzgc61hk7zlb5293qfbicjjgzsgsyg1i52sssa5qbym93jmd5p";
+  }) {};
 in {
   boot.kernelPackages = pkgs.linuxPackages_hardened;
 
@@ -26,7 +32,7 @@ in {
   boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
 
   nixpkgs.config.packageOverrides = pkgs: rec {
-    gitea = unstable.gitea;
+    gitea = danieldk.gitea;
   };
 
   deployment.keys.psql-gitea.text = secrets.castle_gitea_dbpass;
