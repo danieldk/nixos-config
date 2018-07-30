@@ -48,7 +48,7 @@ in {
   environment.systemPackages = with pkgs; [
     git
     git-crypt
-    nixops
+    #nixops
   ];
 
   nix.buildCores = 8;
