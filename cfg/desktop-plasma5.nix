@@ -19,6 +19,7 @@
   environment.systemPackages = with pkgs; [
     gwenview
     korganizer
+    okular
   ];
   
   environment.etc."wayland/plasma-wayland.desktop".text = ''
