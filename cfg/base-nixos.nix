@@ -4,5 +4,8 @@
 let
   unstable = import <nixos-unstable> {};
 in {
-  environment.systemPackages = [ unstable.home-manager ];
+  environment.systemPackages = with pkgs; [
+    unstable.home-manager
+    unzip
+  ];
 }
