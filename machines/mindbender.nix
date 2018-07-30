@@ -18,6 +18,9 @@ in {
   };
 
   boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
+  boot.kernel.sysctl = {
+    "kernel.perf_event_paranoid" = 0;
+  };
   boot.kernelParams = [
     "radeon.si_support=0"
     "amdgpu.si_support=1"
