@@ -133,6 +133,7 @@ in {
   };
 
   services.openssh.enable = true;
+  services.openssh.permitRootLogin = false;
 
   services.postgresql = {
     enable = true;
