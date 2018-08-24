@@ -39,9 +39,16 @@ in {
     gitea = danieldk.gitea;
   };
 
-  deployment.keys.psql-gitea.text = secrets.castle_gitea_dbpass;
+  #deployment.keys.psql-gitea.text = secrets.castle_gitea_dbpass;
+
+  environment.etc = {
+    "cgitrc".text = ''
+      scan-path=/srv/git/
+    '';
+  };
 
   environment.systemPackages = with pkgs; [
+    cgit
     git
     vim
   ];
@@ -108,7 +115,7 @@ in {
   };
 
   services.gitea = {
-    enable = true;
+    enable = false;
     cookieSecure = true;
     database.type = "postgres";
     database.passwordFile = "/run/keys/psql-gitea";
@@ -176,10 +183,19 @@ in {
         serverName = "git.danieldk.eu";
         forceSSL = true;
         enableACME = true;
-        root = "/var/ww/html";
+        root = "${pkgs.cgit}/cgit";
         locations = {
           "/" = {
-            proxyPass = "http://127.0.0.1:3000/";
+            extraConfig = ''
+              try_files $uri @cgit;
+            '';
+          };
+          "@cgit" = {
+            extraConfig = ''
+              uwsgi_pass unix:/run/uwsgi/cgit.sock;
+              include ${pkgs.nginx}/conf/uwsgi_params;
+              uwsgi_modifier1 9;
+            '';
           };
         };
       };
@@ -256,12 +272,21 @@ in {
     enable = true;
     user = "nginx";
     group = "nginx";
-    plugins = [ "python2" ];
+    plugins = [ "cgi" "python2" ];
     
     instance = {
       type = "emperor";
       
       vassals = {
+        cgit = {
+          type = "normal";
+          master = "true";
+          socket = "/run/uwsgi/cgit.sock";
+          procname-master = "uwsgi cgit";
+          plugins = [ "cgi" ];
+          cgi = "${pkgs.cgit}/cgit/cgit.cgi";
+        };
+
         ljdekok = {
           type = "normal";
           pythonPackages = self: with self; [ moinmoin ];
@@ -269,6 +294,7 @@ in {
           socket = "/run/uwsgi/ljdekok.sock";
           wsgi-file = "${pkgs.python27Packages.moinmoin}/share/moin/server/moin.wsgi";
           chdir = "/srv/www/ljdekok.org";
+          plugins = [ "python2" ];
         };
 
         plantsulfur = {
@@ -278,6 +304,7 @@ in {
           socket = "/run/uwsgi/plantsulfur.sock";
           wsgi-file = "${pkgs.python27Packages.moinmoin}/share/moin/server/moin.wsgi";
           chdir = "/srv/www/plantsulfur.org";
+          plugins = [ "python2" ];
         };
       };
     };
