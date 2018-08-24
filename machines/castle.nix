@@ -35,12 +35,6 @@ in {
   boot.kernel.sysctl."vm.mmap_rnd_bits" = 32;
   boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
 
-  nixpkgs.config.packageOverrides = pkgs: rec {
-    gitea = danieldk.gitea;
-  };
-
-  #deployment.keys.psql-gitea.text = secrets.castle_gitea_dbpass;
-
   environment.etc = {
     "cgitrc".text = ''
       scan-path=/srv/git/
@@ -114,31 +108,9 @@ in {
     };
   };
 
-  services.gitea = {
-    enable = false;
-    cookieSecure = true;
-    database.type = "postgres";
-    database.passwordFile = "/run/keys/psql-gitea";
-    domain = "git.danieldk.eu";
-    extraConfig = ''
-      [service]
-      DISABLE_REGISTRATION = true
-      
-      [U2F]
-      APP_ID = https://git.danieldk.eu:443/
-      TRUSTED_FACETS = https://git.danieldk.eu:443/
-    '';
-    httpAddress = "127.0.0.1";
-    rootUrl = "https://git.danieldk.eu/";
-  };
-
   services.openssh.enable = true;
   services.openssh.permitRootLogin = false;
 
-  services.postgresql = {
-    enable = true;
-  };
-   
   services.nginx = {
     enable = true;
     recommendedGzipSettings = true;
