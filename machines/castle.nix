@@ -37,12 +37,27 @@ in {
 
   environment.etc = {
     "cgitrc".text = ''
-      scan-path=/srv/git/
+      cache-size=1000
+      cache-root=/run/uwsgi
+      virtual-root=/
+      enable-http-clone=1
+      enable-blame=1
+      enable-commit-graph=1
+      enable-log-filecount=1
+      enable-log-linecount=1
+      snapshots=tar.gz zip
+
+      source-filter=${unstable.cgit}/lib/cgit/filters/syntax-highlighting.py
+
+      repo.url=finalfrontier
+      repo.path=/srv/git/finalfrontier.git
+      repo.desc=Skip-gram word embedding model with subword units
+      repo.owner=Daniël de Kok
     '';
   };
 
   environment.systemPackages = with pkgs; [
-    cgit
+    unstable.cgit
     git
     vim
   ];
