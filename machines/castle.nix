@@ -10,6 +10,10 @@ let
     sha256 = "14gzgc61hk7zlb5293qfbicjjgzsgsyg1i52sssa5qbym93jmd5p";
   }) {};
 in {
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
   boot.kernelPackages = pkgs.linuxPackages_hardened;
 
   # Kernel hardening.
