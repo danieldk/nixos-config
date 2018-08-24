@@ -109,7 +109,7 @@ in {
   };
 
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = false;
+  services.openssh.permitRootLogin = "no";
 
   services.nginx = {
     enable = true;
