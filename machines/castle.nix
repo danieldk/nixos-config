@@ -40,7 +40,10 @@ in {
       cache-size=1000
       cache-root=/run/cgit
       virtual-root=/
+
       enable-http-clone=1
+      clone-url=https://$HTTP_HOST$SCRIPT_NAME/$CGIT_REPO_URL
+
       enable-blame=1
       enable-commit-graph=1
       enable-log-filecount=1
