@@ -38,7 +38,7 @@ in {
   environment.etc = {
     "cgitrc".text = ''
       cache-size=1000
-      cache-root=/run/uwsgi
+      cache-root=/run/cgit
       virtual-root=/
       enable-http-clone=1
       enable-blame=1
@@ -254,6 +254,17 @@ in {
         };
       };
     };
+  };
+
+  systemd.services.cgitcache = {
+    description = "Create cache directory for cgit";
+    enable = true;
+    wantedBy = [ "uwsgi.service" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      mkdir /run/cgit
+      chown -R nginx:nginx /run/cgit
+    '';
   };
 
   services.uwsgi = {
