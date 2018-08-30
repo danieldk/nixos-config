@@ -5,7 +5,6 @@
 {
   imports = [
     ./base-nixos.nix
-    ./desktop-gnome3.nix
     ./fonts.nix
   ];
 

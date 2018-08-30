@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [
+    ./base-desktop.nix
+  ];
+
   services.xserver = {
     enable = true;
     desktopManager = {
