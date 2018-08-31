@@ -33,7 +33,8 @@
   networking.networkmanager.enable = true;
 
   i18n = {
-  #   consoleFont = "Lat2-Terminus16";
+    # Bigger console font for 4k screen.
+    consoleFont = "latarcyrheb-sun32";
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };
