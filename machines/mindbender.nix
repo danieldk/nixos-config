@@ -80,6 +80,9 @@
 
   # Hardware
   sound.enable = true;
+  hardware.cpu.intel.updateMicrocode = true;
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
   hardware.pulseaudio.enable = true;
   hardware.u2f.enable = true;
 
