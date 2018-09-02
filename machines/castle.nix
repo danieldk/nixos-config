@@ -46,8 +46,15 @@ in {
 
       source-filter=${unstable.cgit}/lib/cgit/filters/syntax-highlighting.py
 
+      about-filter=${unstable.cgit}/lib/cgit/filters/about-formatting.sh
+
+      repo.url=dpar
+      repo.path=/var/lib/gitolite/repositories/dpar.git
+      repo.desc=Neural network dependency parser
+      repo.owner=Daniël de Kok
+
       repo.url=finalfrontier
-      repo.path=/srv/git/finalfrontier.git
+      repo.path=/var/lib/gitolite/repositories/finalfrontier.git
       repo.desc=Skip-gram word embedding model with subword units
       repo.owner=Daniël de Kok
     '';
