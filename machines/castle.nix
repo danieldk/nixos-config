@@ -3,12 +3,6 @@
 let
   secrets = import ../secrets.nix;
   unstable = import <nixos-unstable> {};
-  danieldk = import (pkgs.fetchFromGitHub {
-    owner = "danieldk";
-    repo = "nixpkgs";
-    rev = "ab425326e99349509795cce8a55dcac799bdfa03";
-    sha256 = "14gzgc61hk7zlb5293qfbicjjgzsgsyg1i52sssa5qbym93jmd5p";
-  }) {};
 in {
   imports = [
     ./hardware-configuration.nix
