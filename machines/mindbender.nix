@@ -66,6 +66,7 @@
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.hplip ];
   services.zfs.autoScrub.enable = true;
+  services.xserver.videoDrivers = [ "amdgpu" "radeon" ];
 
   # Open ports in the firewall.
   networking.firewall = {
