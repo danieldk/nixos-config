@@ -60,7 +60,7 @@
   programs.zsh.enableCompletion = true;
 
   # Services
-
+  services.avahi.enable = true;
   services.openssh.enable = true;
   services.pcscd.enable = true;
   services.printing.enable = true;
@@ -72,6 +72,7 @@
     enable = true;
     checkReversePath = false;
     allowedTCPPorts = [ 22 ];
+    allowedUDPPorts = [ 5353 ];
     allowedUDPPortRanges = [ { from = 32768; to = 61000; } ];
   };
   # networking.firewall.allowedUDPPorts = [ ... ];
