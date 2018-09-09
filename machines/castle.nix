@@ -3,6 +3,12 @@
 let
   secrets = import ../secrets.nix;
   unstable = import <nixos-unstable> {};
+  cgit-groff = unstable.cgit.overrideDerivation (oldAttrs: {
+    postPatch = unstable.cgit.postPatch + ''
+      substituteInPlace filters/html-converters/man2html \
+        --replace 'groff' '${pkgs.groff}/bin/groff'
+    '';
+  });
 in {
   imports = [
     ./hardware-configuration.nix
@@ -44,9 +50,9 @@ in {
       enable-log-linecount=1
       snapshots=tar.gz zip
 
-      source-filter=${unstable.cgit}/lib/cgit/filters/syntax-highlighting.py
+      source-filter=${cgit-groff}/lib/cgit/filters/syntax-highlighting.py
 
-      about-filter=${unstable.cgit}/lib/cgit/filters/about-formatting.sh
+      about-filter=${cgit-groff}/lib/cgit/filters/about-formatting.sh
 
       repo.url=dpar
       repo.path=/var/lib/gitolite/repositories/dpar.git
@@ -61,7 +67,6 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    unstable.cgit
     git
     vim
   ];
@@ -175,7 +180,7 @@ in {
         serverName = "git.danieldk.eu";
         forceSSL = true;
         enableACME = true;
-        root = "${pkgs.cgit}/cgit";
+        root = "${cgit-groff}/cgit";
         locations = {
           "/" = {
             extraConfig = ''
