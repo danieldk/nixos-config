@@ -40,6 +40,8 @@ in {
       cache-size=1000
       cache-root=/run/cgit
       virtual-root=/
+      root-title=danieldk.eu git repositories
+      root-desc=Source code of various danieldk.eu projects
 
       enable-http-clone=1
       clone-url=https://$HTTP_HOST$SCRIPT_NAME/$CGIT_REPO_URL
@@ -63,6 +65,13 @@ in {
       repo.path=/var/lib/gitolite/repositories/finalfrontier.git
       repo.desc=Skip-gram word embedding model with subword units
       repo.owner=Daniël de Kok
+      repo.readme=master:README.md
+
+      repo.url=finalfrontier-python
+      repo.path=/var/lib/gitolite/repositories/finalfrontier-python.git
+      repo.desc=Python binding for finalfrontier
+      repo.owner=Daniël de Kok
+      #repo.readme=master:README.md
     '';
   };
 
