@@ -92,7 +92,7 @@
     createHome = true;
     home = "/home/daniel";
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" "libvirtd" "video" ];
+    extraGroups = [ "wheel" "cdrom" "libvirtd" "video" ];
     isNormalUser = true;
   };
 
