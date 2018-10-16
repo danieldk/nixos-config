@@ -14,6 +14,7 @@
     allowUnfree = true;
   };
 
+  boot.kernelParams = ["zfs.zfs_arc_max=4294967296"];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; 
   boot.supportedFilesystems = [ "zfs" ];
