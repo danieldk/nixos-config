@@ -130,6 +130,18 @@ in {
       email = "me@danieldk.eu";
     };
 
+    "gitea.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
+    "scratch.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
+    "wordrepr.danieldk.eu" = {
+      email = "me@danieldk.eu";
+    };
+
     "ljdekok.com" = {
       extraDomains = { "www.ljdekok.com" = null; };
       email = "me@danieldk.eu";
@@ -143,6 +155,23 @@ in {
 
   services.openssh.enable = true;
   services.openssh.permitRootLogin = "no";
+
+  services.gitea = {
+    enable = true;
+    cookieSecure = true;
+    database.type = "sqlite3";
+    domain = "gitea.danieldk.eu";
+    extraConfig = ''
+      [service]
+      DISABLE_REGISTRATION = true
+      
+      [U2F]
+      APP_ID = https://gitea.danieldk.eu:443/
+      TRUSTED_FACETS = https://gitea.danieldk.eu:443/
+    '';
+    httpAddress = "127.0.0.1";
+    rootUrl = "https://gitea.danieldk.eu/";
+  };
 
   services.nginx = {
     enable = true;
@@ -205,6 +234,18 @@ in {
           };
         };
       };
+
+      "gitea.danieldk.eu" = {
+        serverName = "gitea.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/html";
+        locations = {
+          "/" = {
+            proxyPass = "http://127.0.0.1:3000/";
+          };
+        };
+      };
     
       "arch.danieldk.eu" = {
         serverName = "arch.danieldk.eu";
@@ -212,6 +253,21 @@ in {
         enableACME = true;
         extraConfig = "autoindex on;";
         root = "/srv/www/arch.danieldk.eu";
+      };
+
+      "scratch.danieldk.eu" = {
+        serverName = "scratch.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        extraConfig = "autoindex on;";
+        root = "/srv/www/scratch.danieldk.eu";
+      };
+
+      "wordrepr.danieldk.eu" = {
+        serverName = "wordrepr.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        root = "/srv/www/wordrepr.danieldk.eu";
       };
 
       "dekok.dk" = {
