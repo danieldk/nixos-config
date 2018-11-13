@@ -280,7 +280,9 @@ in {
     wantedBy = [ "uwsgi.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
-      mkdir /run/cgit
+      if [ ! -d /run/cgit ]; then
+        mkdir /run/cgit
+      fi
       chown -R nginx:nginx /run/cgit
     '';
   };
