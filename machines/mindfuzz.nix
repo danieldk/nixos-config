@@ -22,7 +22,22 @@
   boot.kernelParams = [
     # Limit maximum ARC size to 4GB
     "zfs.zfs_arc_max=4294967296"
+
+    # Overwrite free'd memory
+    "page_poison=1"
+
+    # Disable legacy virtual syscalls
+    "vsyscall=none"
+
+    # Disable hibernation (allows replacing the running kernel)
+    "nohibernate"
   ];
+
+  boot.kernel.sysctl."kernel.kexec_load_disabled" = true;
+  boot.kernel.sysctl."kernel.unprivileged_bpf_disabled" = true;
+  boot.kernel.sysctl."net.core.bpf_jit_harden" = true;
+  boot.kernel.sysctl."vm.mmap_rnd_bits" = 32;
+  boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
 
   networking.hostName = "mindfuzz";
   #networking.networkmanager.enable = true;
