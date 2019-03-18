@@ -19,6 +19,11 @@
   boot.loader.efi.canTouchEfiVariables = true; 
   boot.supportedFilesystems = [ "zfs" ];
 
+  boot.kernelParams = [
+    # Limit maximum ARC size to 4GB
+    "zfs.zfs_arc_max=4294967296"
+  ];
+
   networking.hostName = "mindfuzz";
   #networking.networkmanager.enable = true;
 
