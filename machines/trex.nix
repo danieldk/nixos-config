@@ -29,9 +29,20 @@
 
   time.timeZone = "Europe/Amsterdam";
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; let
+  myTuxpaint = tuxpaint.overrideAttrs (oldAttrs: rec {
+    postInstall = ''
+      mkdir -p $out/share/applications
+      cp src/tuxpaint.desktop $out/share/applications/
+    '' + oldAttrs.postInstall;
+  });
+  in [
+    extremetuxracer
     gcompris
-    tuxpaint
+    krita
+    superTux
+    superTuxKart
+    myTuxpaint
   ];
 
   nix.buildCores = 4;
