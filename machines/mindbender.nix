@@ -13,17 +13,16 @@
 
   nixpkgs.config = {
     allowUnfree = true;
+    packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    };
   };
 
   #boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
   boot.kernel.sysctl = {
     "kernel.perf_event_paranoid" = 0;
   };
-  boot.kernelParams = [
-    "radeon.si_support=0"
-    "amdgpu.si_support=1"
-  ];
-  boot.kernelPackages = pkgs.linuxPackages_4_18;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; 
   boot.supportedFilesystems = [ "zfs" ];
@@ -50,7 +49,7 @@
     #nixops
   ];
 
-  nix.buildCores = 8;
+  nix.buildCores = 4;
   nix.useSandbox = true;
 
   programs.bash.enableCompletion = true;
@@ -69,7 +68,7 @@
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.hplip ];
   services.zfs.autoScrub.enable = true;
-  services.xserver.videoDrivers = [ "amdgpu" "radeon" ];
+  services.xserver.videoDrivers = [ "intel" ];
 
   # Open ports in the firewall.
   networking.firewall = {
@@ -86,9 +85,17 @@
   # Hardware
   sound.enable = true;
   hardware.cpu.intel.updateMicrocode = true;
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport32Bit = true;
-  hardware.pulseaudio.enable = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      vaapiIntel
+      vaapiVdpau
+      libvdpau-va-gl
+      intel-media-driver
+      intel-ocl
+    ];
+  };
   hardware.u2f.enable = true;
 
   users.extraUsers.daniel = {
