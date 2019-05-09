@@ -60,7 +60,10 @@
   programs.zsh.enableCompletion = true;
 
   # Services
-  services.avahi.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+  };
   services.openssh.enable = true;
   services.pcscd.enable = true;
   services.printing.enable = true;
