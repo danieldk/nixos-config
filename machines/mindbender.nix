@@ -19,6 +19,10 @@
   };
 
   #boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
+  boot.kernelParams = [
+    # Limit maximum ARC size to 4GB
+    "zfs.zfs_arc_max=4294967296"
+  ];
   boot.kernel.sysctl = {
     "kernel.perf_event_paranoid" = 0;
   };
