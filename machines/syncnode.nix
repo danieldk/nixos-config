@@ -35,6 +35,27 @@
     permitRootLogin = "yes";
   };
 
+  services.nginx = {
+    enable = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+
+    commonHttpConfig = ''
+      server_names_hash_bucket_size 64;
+    '';
+
+    virtualHosts = {
+      "blob.danieldk.eu" = {
+        serverName = "blob.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        extraConfig = "autoindex on;";
+        root = "/storage/www/blob.danieldk.eu";
+      };
+    };
+  };
+
   services.resilio = {
     enable = true;
     enableWebUI = true;
@@ -43,15 +64,33 @@
     useUpnp = false;
   };
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 22 44444 ];
-    allowedUDPPorts = [ 44444 ];
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 80 443 44444 ];
+      allowedUDPPorts = [ 44444 ];
+    };
+
+    interfaces.ens3.ipv6.addresses = [{
+      address = "2a01:4f8:1c17:7d38::1";
+      prefixLength = 64;
+    }];
+
+    defaultGateway6 = {
+      address = "fe80::1";
+      interface = "ens3";
+    };
   };
 
   security = {
     hideProcessInformation = true;
     lockKernelModules = true;
+
+    acme.certs = {
+      "blob.danieldk.eu" = {
+        email = "me@danieldk.eu";
+      };
+    };
   };
 
   users.extraUsers.daniel = {
