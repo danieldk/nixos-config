@@ -58,8 +58,10 @@
     #nixops
   ];
 
-  nix.buildCores = 4;
-  nix.useSandbox = true;
+  nix = {
+    buildCores = 4;
+    useSandbox = true;
+  };
 
   programs.bash.enableCompletion = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
