@@ -74,6 +74,7 @@
     enable = true;
     nssmdns = true;
   };
+  services.fwupd.enable = true;
   services.openssh.enable = true;
   services.pcscd.enable = true;
   services.printing.enable = true;
