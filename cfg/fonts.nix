@@ -8,6 +8,7 @@
 
     fonts = with pkgs; [
       corefonts
+      fira-code
       google-fonts
       noto-fonts
       noto-fonts-emoji
