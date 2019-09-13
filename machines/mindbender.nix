@@ -32,6 +32,11 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.enableUnstable = true;
 
+  hardware.sane = {
+    enable = true;
+    extraBackends = [ pkgs.hplipWithPlugin ];
+  };
+
   networking.hostName = "mindbender";
   networking.networkmanager.enable = true;
 
