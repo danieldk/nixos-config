@@ -38,7 +38,7 @@
   };
 
   networking.hostName = "mindbender";
-  networking.networkmanager.enable = true;
+  networking.networkmanager.enable = false;
 
   i18n = {
     # Bigger console font for 4k screen.
