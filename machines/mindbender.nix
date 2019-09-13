@@ -122,6 +122,18 @@
     shell = pkgs.zsh;
     extraGroups = [ "wheel" "cdrom" "libvirtd" "video" "plugdev" "dialout" "scanner" ];
     isNormalUser = true;
+    subGidRanges = [
+      {
+        count = 2048;
+        startGid = 100001;
+      }
+    ];
+    subUidRanges = [
+      {
+        count = 2048;
+        startUid = 100001;
+      }
+    ];
   };
 
   virtualisation.libvirtd.enable = true;
