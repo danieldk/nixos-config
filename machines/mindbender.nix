@@ -80,6 +80,9 @@
   services.pcscd.enable = true;
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.hplip ];
+  services.udev.extraRules = ''
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="a2ca", TAG+="uaccess", MODE="0660", GROUP="plugdev" 
+  '';
   services.zfs.autoScrub.enable = true;
   services.xserver.videoDrivers = [ "intel" ];
 
@@ -110,6 +113,8 @@
     ];
   };
   hardware.u2f.enable = true;
+
+  users.extraGroups.plugdev = { };
 
   users.extraUsers.daniel = {
     createHome = true;
