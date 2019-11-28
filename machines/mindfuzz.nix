@@ -111,8 +111,8 @@
   networking.firewall = {
     enable = true;
     checkReversePath = false;
-    allowedTCPPorts = [ 22 139 445 9000 ];
-    allowedUDPPorts = [ 137 138 ];
+    allowedTCPPorts = [ 22 53 80 139 443 445 1883 3000 9000 ];
+    allowedUDPPorts = [ 53 137 138 1883 ];
   };
 
   networking.hostId = "8bfc957f";
