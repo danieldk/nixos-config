@@ -69,7 +69,7 @@
   # Services
   services.avahi.enable = true;
 
-  #services.fwupd.enable = true;
+  services.fwupd.enable = true;
 
   services.openssh = {
     enable = true;
@@ -119,6 +119,7 @@
 
   # Hardware
   hardware.cpu.intel.updateMicrocode = true;
+  hardware.enableAllFirmware = true;
 
   users.extraUsers = {
     daniel = {
