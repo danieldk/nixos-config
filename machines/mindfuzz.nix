@@ -2,18 +2,39 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    ];
+
+  fileSystems."/" =
+    { device = "zpool/root/nixos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home" =
+    { device = "zpool/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/4CB3-3762";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/433af8b4-5192-404a-8eb2-727db7b10086"; }
     ];
 
   nixpkgs.config = {
     allowUnfree = true;
   };
 
+  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" "rtsx_pci_sdmmc" ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.kernelPackages = pkgs.linuxPackages_4_19;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; 
@@ -59,7 +80,10 @@
   ];
 
   nix.buildCores = 2;
+  nix.maxJobs = 2;
   nix.useSandbox = true;
+
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   programs.bash.enableCompletion = true;
   programs.vim.defaultEditor = true;
