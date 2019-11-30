@@ -10,6 +10,8 @@ in {
     description = "Personal VPSes";
   };
 
+  "mindfuzz" = import ../machines/mindfuzz.nix;
+
   "syncnode.dekok.dk" = addDeployment (import ../machines/syncnode.nix) {
     healthChecks = {
       http = [
