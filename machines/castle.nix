@@ -8,7 +8,8 @@ in {
     ./hardware-configuration.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_hardened;
+  #boot.kernelPackages = pkgs.linuxPackages_hardened;
+  boot.kernelPackages = pkgs.linuxPackages;
 
   # Kernel hardening.
   boot.kernelParams = [
