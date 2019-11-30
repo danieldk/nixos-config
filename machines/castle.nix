@@ -139,6 +139,7 @@ in {
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
+    clientMaxBodySize = "250m";
     
     commonHttpConfig = ''
       server_names_hash_bucket_size 64;
