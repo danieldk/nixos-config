@@ -37,11 +37,29 @@ in {
 
   time.timeZone = "Europe/Amsterdam";
 
-  users.extraUsers.daniel = {
-    createHome = true;
-    home = "/home/daniel";
-    extraGroups = [ "wheel" ];
-    isNormalUser = true;
+  users.extraUsers = {
+    daniel = {
+      createHome = true;
+      home = "/home/daniel";
+      extraGroups = [ "wheel" ];
+      isNormalUser = true;
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICjEndjSNA5r4F5fdM9ZL9v1xY5+vGXYGHBUAQGAt5h3"
+        "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxQ5dl7Md+wbS5IzCjTV4MN3fyo+/aeVJFA6ITCq43lWMMmFluooGi078S8huWFZwjuphJota5g/M3Q/U3G7KiCfDZN4HwucPGT8NQFHntRKQ9DdjJfeD+zE3ZTdKYsXe3N5wI5KSIgZIWk6WA4viZLtVVFHrttDirC30g4H9Cx/OdoIzANDtWAOxkYNeTz/lFnawuzbUasVJsCxYJ7AI6BKhaYqR6Fr12ceHEtmXG5nsZ/r6rHqdZHCknvSx1lSbp/cLReWFvlxtipmbvFHAbaVoc1TsRwExvOw26eSOgjqNFKumriVeOTpIlaZXpzGy+tEHeymmN63fF1UmsHUHBw=="
+      ];
+    };
+
+    doerte = {
+      createHome = true;
+      home = "/home/doerte";
+      isNormalUser = true;
+      openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA8Xz5MAKVBVGeyeybDaTXz+kBlzPiLrX6K1DKeVjchUu8nnahTIFPjv5vlLZMc3SUKiNNdTCuOJD4e6Nv2xFP+CO+7vV4AEJbRPyBRVx+3VPH8anGtg6Eyrc8EeqEr8G4tKf5cmVYNzzEnEo01Pc7iGWCA19Qe+Dy2k7RSyLNhzPLUCPD3rKTn0asK4bfw9kfmAcbYe/gaV22ZZYBrbK6A0W2cxT1ZMJz7ollDHehP+WKAIMHioMwFAlkqUAqqeb3D2okBcSkYg8pduUy6lsu251iEvdn8L3oRD2/F/oKxgUyYm8REEJWT7Nh23aTjqBbhIieIMaoFRrZoYikrgZ5Fw== me@doerte.eu"
+      ];
+    };
+  };
+
+  users.extraUsers.root = {
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICjEndjSNA5r4F5fdM9ZL9v1xY5+vGXYGHBUAQGAt5h3"
       "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxQ5dl7Md+wbS5IzCjTV4MN3fyo+/aeVJFA6ITCq43lWMMmFluooGi078S8huWFZwjuphJota5g/M3Q/U3G7KiCfDZN4HwucPGT8NQFHntRKQ9DdjJfeD+zE3ZTdKYsXe3N5wI5KSIgZIWk6WA4viZLtVVFHrttDirC30g4H9Cx/OdoIzANDtWAOxkYNeTz/lFnawuzbUasVJsCxYJ7AI6BKhaYqR6Fr12ceHEtmXG5nsZ/r6rHqdZHCknvSx1lSbp/cLReWFvlxtipmbvFHAbaVoc1TsRwExvOw26eSOgjqNFKumriVeOTpIlaZXpzGy+tEHeymmN63fF1UmsHUHBw=="
@@ -113,24 +131,7 @@ in {
   };
 
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "no";
-
-  services.gitea = {
-    enable = true;
-    cookieSecure = true;
-    database.type = "sqlite3";
-    domain = "gitea.danieldk.eu";
-    extraConfig = ''
-      [service]
-      DISABLE_REGISTRATION = true
-      
-      [U2F]
-      APP_ID = https://gitea.danieldk.eu:443/
-      TRUSTED_FACETS = https://gitea.danieldk.eu:443/
-    '';
-    httpAddress = "127.0.0.1";
-    rootUrl = "https://gitea.danieldk.eu/";
-  };
+  #services.openssh.permitRootLogin = "no";
 
   services.nginx = {
     enable = true;
