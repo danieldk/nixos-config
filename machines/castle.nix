@@ -3,12 +3,6 @@
 let
   secrets = import ../secrets.nix;
   unstable = import <nixos-unstable> {};
-  cgit-groff = unstable.cgit.overrideDerivation (oldAttrs: {
-    postPatch = unstable.cgit.postPatch + ''
-      substituteInPlace filters/html-converters/man2html \
-        --replace 'groff' '${pkgs.groff}/bin/groff'
-    '';
-  });
 in {
   imports = [
     ./hardware-configuration.nix
@@ -34,46 +28,6 @@ in {
   boot.kernel.sysctl."user.max_user_namespaces" = 0;
   boot.kernel.sysctl."vm.mmap_rnd_bits" = 32;
   boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
-
-  environment.etc = {
-    "cgitrc".text = ''
-      cache-size=1000
-      cache-root=/run/cgit
-      virtual-root=/
-      root-title=danieldk.eu git repositories
-      root-desc=Source code of various danieldk.eu projects
-
-      enable-http-clone=1
-      clone-url=https://$HTTP_HOST$SCRIPT_NAME/$CGIT_REPO_URL
-
-      enable-blame=1
-      enable-commit-graph=1
-      enable-log-filecount=1
-      enable-log-linecount=1
-      snapshots=tar.gz zip
-
-      source-filter=${cgit-groff}/lib/cgit/filters/syntax-highlighting.py
-
-      about-filter=${cgit-groff}/lib/cgit/filters/about-formatting.sh
-
-      repo.url=dpar
-      repo.path=/var/lib/gitolite/repositories/dpar.git
-      repo.desc=Neural network dependency parser
-      repo.owner=Daniël de Kok
-
-      repo.url=finalfrontier
-      repo.path=/var/lib/gitolite/repositories/finalfrontier.git
-      repo.desc=Skip-gram word embedding model with subword units
-      repo.owner=Daniël de Kok
-      repo.readme=master:README.md
-
-      repo.url=finalfrontier-python
-      repo.path=/var/lib/gitolite/repositories/finalfrontier-python.git
-      repo.desc=Python binding for finalfrontier
-      repo.owner=Daniël de Kok
-      #repo.readme=master:README.md
-    '';
-  };
 
   environment.systemPackages = with pkgs; [
     git
@@ -113,6 +67,18 @@ in {
       email = "me@danieldk.eu";
     };
 
+    "grafana.dekok.dk" = {
+      email = "me@danieldk.eu";
+    };
+
+    "mqtt.dekok.dk" = {
+      email = "me@danieldk.eu";
+    };
+
+    "scratch.doerte.eu" = {
+      email = "me@doerte.eu";
+    };
+
     "dekok.dk" = {
       extraDomains = { "www.dekok.dk" = null; };
       email = "me@danieldk.eu";
@@ -123,14 +89,6 @@ in {
     };
 
     "flatpak.danieldk.eu" = {
-      email = "me@danieldk.eu";
-    };
-
-    "git.danieldk.eu" = {
-      email = "me@danieldk.eu";
-    };
-
-    "gitea.danieldk.eu" = {
       email = "me@danieldk.eu";
     };
 
@@ -214,39 +172,6 @@ in {
         root = "/srv/www/flatpak.danieldk.eu";
       };
 
-      "git.danieldk.eu" = {
-        serverName = "git.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        root = "${cgit-groff}/cgit";
-        locations = {
-          "/" = {
-            extraConfig = ''
-              try_files $uri @cgit;
-            '';
-          };
-          "@cgit" = {
-            extraConfig = ''
-              uwsgi_pass unix:/run/uwsgi/cgit.sock;
-              include ${pkgs.nginx}/conf/uwsgi_params;
-              uwsgi_modifier1 9;
-            '';
-          };
-        };
-      };
-
-      "gitea.danieldk.eu" = {
-        serverName = "gitea.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/html";
-        locations = {
-          "/" = {
-            proxyPass = "http://127.0.0.1:3000/";
-          };
-        };
-      };
-    
       "arch.danieldk.eu" = {
         serverName = "arch.danieldk.eu";
         forceSSL = true;
@@ -276,6 +201,33 @@ in {
         forceSSL = true;
         enableACME = true;
         root = "/srv/www/dekok.dk";
+      };
+
+      "grafana.dekok.dk" = {
+        serverName = "grafana.dekok.dk";
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/html";
+        locations = {
+          "/" = {
+            proxyPass = "http://127.0.0.1:3000/";
+          };
+        };
+      };
+
+      "mqtt.dekok.dk" = {
+        serverName = "mqtt.dekok.dk";
+        forceSSL = true;
+        enableACME = true;
+        root = "/srv/www/mqtt.dekok.dk";
+      };
+
+      "scratch.doerte.eu" = {
+        serverName = "scratch.doerte.eu";
+        extraConfig = "autoindex on;";
+        forceSSL = true;
+        enableACME = true;
+        root = "/home/doerte/scratch.doerte.eu";
       };
 
       "ljdekok.com" = {
@@ -330,30 +282,77 @@ in {
     };
   };
 
-  systemd.services.cgitcache = {
-    description = "Create cache directory for cgit";
+  services.grafana = {
     enable = true;
-    wantedBy = [ "uwsgi.service" ];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      if [ ! -d /run/cgit ]; then
-        mkdir /run/cgit
-      fi
-      chown -R nginx:nginx /run/cgit
-    '';
+    analytics.reporting.enable = false;
+    package = unstable.grafana;
   };
 
-  services.gitolite = {
+  services.mosquitto = {
     enable = true;
-    extraGitoliteRc = ''
-      $RC{UMASK} = 0027;
-    '';
-    adminPubkey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxQ5dl7Md+wbS5IzCjTV4MN3fyo+/aeVJFA6ITCq43lWMMmFluooGi078S8huWFZwjuphJota5g/M3Q/U3G7KiCfDZN4HwucPGT8NQFHntRKQ9DdjJfeD+zE3ZTdKYsXe3N5wI5KSIgZIWk6WA4viZLtVVFHrttDirC30g4H9Cx/OdoIzANDtWAOxkYNeTz/lFnawuzbUasVJsCxYJ7AI6BKhaYqR6Fr12ceHEtmXG5nsZ/r6rHqdZHCknvSx1lSbp/cLReWFvlxtipmbvFHAbaVoc1TsRwExvOw26eSOgjqNFKumriVeOTpIlaZXpzGy+tEHeymmN63fF1UmsHUHBw== /Users/daniel/.ssh/id_rsa";
-    user = "git";
-    group = "git";
+    host = "0.0.0.0";
+    checkPasswords = true;
+    ssl = {
+      enable = true;
+      #cafile = "/var/lib/mosquitto/ca.crt";
+      #certfile = "/var/lib/mosquitto/server.crt";
+      #keyfile = "/var/lib/mosquitto/server.key";
+      cafile = "/var/lib/mosquitto/fullchain.pem";
+      certfile = "/var/lib/mosquitto/fullchain.pem";
+      keyfile = "/var/lib/mosquitto/key.pem";
+    };
+    extraConf = "require_certificate false";
+    users = {
+       sensornode = {
+         acl = ["topic readwrite sensor/#" ];
+         password = "player.sect.kay.manacle.afire";
+       };
+       smartmeter = {
+         acl = ["topic readwrite smartmeter/#" ];
+         password = "viand.sware.daunt.touch.receptor";
+       };
+       telegraf = {
+         acl = ["topic readwrite sensor/#" "topic readwrite smartmeter/#" ];
+         password = "player.sect.kay.manacle.afire";
+       };
+    };
   };
 
-  users.extraUsers.nginx.extraGroups = [ "git" ];
+  services.influxdb = {
+    enable = true;
+    #extraConfig = {
+    #  http = {
+    #    enabled = true;
+    #    bind-address = ":8086";
+    #    auth-enabled = true;
+    #    log-enabled = true;
+    #    write-tracing = false;
+    #    pprof-enabled = false;
+    #  };
+    #};
+  };
+
+  services.telegraf = {
+    enable = true;
+    extraConfig = {
+      inputs = {
+        mqtt_consumer = {
+          servers = ["tcp://localhost:1883"];
+          username = "telegraf";
+          password = "player.sect.kay.manacle.afire";
+          qos = 0;
+          topics = [ "sensor/#" "smartmeter/#" ];
+        };
+      };
+      outputs = {
+        influxdb = {
+          database = "sensors";
+          urls = [ "http://localhost:8086" ];
+        };
+      };
+    };
+  };
+
 
   services.uwsgi = {
     enable = true;
@@ -365,15 +364,6 @@ in {
       type = "emperor";
       
       vassals = {
-        cgit = {
-          type = "normal";
-          master = "true";
-          socket = "/run/uwsgi/cgit.sock";
-          procname-master = "uwsgi cgit";
-          plugins = [ "cgi" ];
-          cgi = "${pkgs.cgit}/cgit/cgit.cgi";
-        };
-
         ljdekok = {
           type = "normal";
           pythonPackages = self: with self; [ moinmoin ];
