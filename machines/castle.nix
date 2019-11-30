@@ -25,7 +25,7 @@ in {
   boot.kernel.sysctl."kernel.kexec_load_disabled" = true;
   boot.kernel.sysctl."kernel.unprivileged_bpf_disabled" = true;
   boot.kernel.sysctl."net.core.bpf_jit_harden" = true;
-  boot.kernel.sysctl."user.max_user_namespaces" = 0;
+  boot.kernel.sysctl."user.max_user_namespaces" = 1;
   boot.kernel.sysctl."vm.mmap_rnd_bits" = 32;
   boot.kernel.sysctl."vm.mmap_min_addr" = 65536;
 
