@@ -260,10 +260,10 @@ in {
           "~ ^/wiki/(.*)" = {
             alias = "/srv/www/ljdekok.org/htdocs/$1";
           };
-          "/robots.txt" = {
+          "=/robots.txt" = {
             alias = "/srv/www/ljdekok.org/htdocs/robots.txt";
           };
-          "/favicon.ico" = {
+          "=/favicon.ico" = {
             alias = "/srv/www/ljdekok.org/htdocs/favicon.ico";
           };
         };
@@ -285,10 +285,10 @@ in {
           "~ ^/wiki/(.*)" = {
             alias = "/srv/www/plantsulfur.org/htdocs/$1";
           };
-          "/robots.txt" = {
+          "=/robots.txt" = {
             alias = "/srv/www/plantsulfur.org/htdocs/robots.txt";
           };
-          "/favicon.ico" = {
+          "=/favicon.ico" = {
             alias = "/srv/www/plantsulfur.org/htdocs/favicon.ico";
           };
         };
