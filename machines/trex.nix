@@ -38,6 +38,7 @@
   });
   in [
     extremetuxracer
+    firefox
     gcompris
     krita
     superTux
