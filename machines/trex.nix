@@ -2,14 +2,34 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
       ../cfg/desktop-gnome3.nix
     ];
+
+  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/1c54b0f7-6ed6-40c2-93e0-501aa8ee3698";
+      fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/2773-084B";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/b975031c-6fda-4586-8619-cefe414da79f"; }
+    ];
+
+  nix.maxJobs = lib.mkDefault 4;
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   nixpkgs.config = {
     allowUnfree = true;
