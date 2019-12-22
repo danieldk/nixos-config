@@ -105,7 +105,7 @@
   };
   hardware.pulseaudio.enable = true;
 
-  users.extraUsers = {
+  users.users = {
     daniel = {
       createHome = true;
       description = "Daniël de Kok";
@@ -128,6 +128,9 @@
       home = "/home/liset";
       extraGroups = [ "cdrom" "video" "nopasswdlogin" ];
       isNormalUser = true;
+    };
+    root = {
+      openssh.authorizedKeys.keys = import ../cfg/danieldk-keys.nix;
     };
   };
 
