@@ -1,6 +1,6 @@
 let
   pkgs = import (builtins.fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs-channels/archive/nixos-19.09.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs-channels/archive/nixos-20.03.tar.gz";
   }) {};
   addDeployment = machineConfig: deploy: args@{ config, lib, pkgs, ... }:
     machineConfig args // { deployment = deploy; };
@@ -10,7 +10,18 @@ in {
     description = "Personal VPSes";
   };
 
-  "castle.danieldk.eu" = import ../machines/castle.nix;
+  "castle.danieldk.eu" = addDeployment (import ../machines/castle.nix) {
+    healthChecks = {
+      http = [
+        {
+          scheme = "https";
+          port = 443;
+          host = "ljdekok.org";
+          description = "Check whether ljdekok.org is reachable.";
+        }
+      ];
+    };
+  };
 
   "mindfuzz" = import ../machines/mindfuzz.nix;
 

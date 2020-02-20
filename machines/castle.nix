@@ -2,7 +2,6 @@
 
 let
   secrets = import ../secrets.nix;
-  unstable = import <nixos-unstable> {};
 in {
   imports =
     [ <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
@@ -83,20 +82,12 @@ in {
   };
 
   security = {
+    acme.acceptTerms = true;
     hideProcessInformation = true;
     lockKernelModules = true;
   };
 
   security.acme.certs = {
-    "arch.danieldk.eu" = {
-      email = "me@danieldk.eu";
-    };
-
-    "danieldk.eu" = {
-      extraDomains = { "www.danieldk.eu" = null; };
-      email = "me@danieldk.eu";
-    };
-
     "grafana.dekok.dk" = {
       email = "me@danieldk.eu";
     };
@@ -111,22 +102,6 @@ in {
 
     "dekok.dk" = {
       extraDomains = { "www.dekok.dk" = null; };
-      email = "me@danieldk.eu";
-    };
-
-    "elaml.danieldk.eu" = {
-      email = "me@danieldk.eu";
-    };
-
-    "flatpak.danieldk.eu" = {
-      email = "me@danieldk.eu";
-    };
-
-    "scratch.danieldk.eu" = {
-      email = "me@danieldk.eu";
-    };
-
-    "wordrepr.danieldk.eu" = {
       email = "me@danieldk.eu";
     };
 
@@ -161,52 +136,6 @@ in {
         serverAliases = [ "www.apgc.eu" ];
         root = "/var/www/html";
         globalRedirect = "onlinelibrary.wiley.com/doi/full/10.1111/plb.12413";
-      };
-
-      "danieldk.eu" = {
-        serverName = "danieldk.eu";
-        serverAliases = [ "www.danieldk.eu" ];
-        forceSSL = true;
-        enableACME = true;
-        root = "/srv/www/danieldk.eu";
-      };
-
-      "elaml.danieldk.eu" = {
-        serverName = "elaml.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        root = "/srv/www/elaml.danieldk.eu";
-      };
-
-      "flatpak.danieldk.eu" = {
-        serverName = "flatpak.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        extraConfig = "autoindex on;";
-        root = "/srv/www/flatpak.danieldk.eu";
-      };
-
-      "arch.danieldk.eu" = {
-        serverName = "arch.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        extraConfig = "autoindex on;";
-        root = "/srv/www/arch.danieldk.eu";
-      };
-
-      "scratch.danieldk.eu" = {
-        serverName = "scratch.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        extraConfig = "autoindex on;";
-        root = "/srv/www/scratch.danieldk.eu";
-      };
-
-      "wordrepr.danieldk.eu" = {
-        serverName = "wordrepr.danieldk.eu";
-        forceSSL = true;
-        enableACME = true;
-        root = "/srv/www/wordrepr.danieldk.eu";
       };
 
       "dekok.dk" = {
@@ -299,7 +228,7 @@ in {
   services.grafana = {
     enable = true;
     analytics.reporting.enable = false;
-    package = unstable.grafana;
+    package = pkgs.grafana;
   };
 
   services.mosquitto = {

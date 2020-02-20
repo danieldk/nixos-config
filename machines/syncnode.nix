@@ -58,6 +58,15 @@
     permitRootLogin = "yes";
   };
 
+  /*
+  services.minio = {
+    enable = true;
+    dataDir = "/storage/minio/data";
+    configDir = "/storage/minio/config";
+    listenAddress = "127.0.0.1:10000";
+  };
+  */
+
   services.nginx = {
     enable = true;
     recommendedGzipSettings = true;
@@ -76,6 +85,66 @@
         extraConfig = "autoindex on;";
         root = "/storage/www/blob.danieldk.eu";
       };
+
+      "danieldk.eu" = {
+        serverName = "danieldk.eu";
+        serverAliases = [ "www.danieldk.eu" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/storage/www/danieldk.eu";
+      };
+
+      "elaml.danieldk.eu" = {
+        serverName = "elaml.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        root = "/storage/www/elaml.danieldk.eu";
+      };
+
+      "flatpak.danieldk.eu" = {
+        serverName = "flatpak.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        extraConfig = "autoindex on;";
+        root = "/storage/www/flatpak.danieldk.eu";
+      };
+
+      "rustdoc.danieldk.eu" = {
+        serverName = "rustdoc.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        extraConfig = "autoindex on;";
+        root = "/storage/www/rustdoc.danieldk.eu";
+      };
+
+      "wordrepr.danieldk.eu" = {
+        serverName = "wordrepr.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+        root = "/storage/www/wordrepr.danieldk.eu";
+      };
+
+
+      /*
+      "s3.danieldk.eu" = {
+        serverName = "s3.danieldk.eu";
+        forceSSL = true;
+        enableACME = true;
+
+
+        extraConfig = ''
+          #ignore_invalid_headers = off;
+          client_max_body_size 200m;
+          proxy_buffering off;
+        '';
+
+        locations = {
+          "/" = {
+            proxyPass = "http://127.0.0.1:10000";
+          };
+        };
+      };
+      */
     };
   };
 
@@ -109,10 +178,34 @@
     hideProcessInformation = true;
     lockKernelModules = true;
 
+    acme.acceptTerms = true;
+
     acme.certs = {
       "blob.danieldk.eu" = {
         email = "me@danieldk.eu";
       };
+
+      "danieldk.eu" = {
+        extraDomains = { "www.danieldk.eu" = null; };
+        email = "me@danieldk.eu";
+      };
+
+      "elaml.danieldk.eu" = {
+        email = "me@danieldk.eu";
+      };
+
+      "flatpak.danieldk.eu" = {
+        email = "me@danieldk.eu";
+      };
+
+      "rustdoc.danieldk.eu" = {
+        email = "me@danieldk.eu";
+      };
+
+      "wordrepr.danieldk.eu" = {
+        email = "me@danieldk.eu";
+      };
+
     };
   };
 
