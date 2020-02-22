@@ -10,6 +10,7 @@
       corefonts
       fira-code
       google-fonts
+      jetbrains-mono
       noto-fonts
       noto-fonts-emoji
       source-code-pro
