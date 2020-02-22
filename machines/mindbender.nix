@@ -151,6 +151,34 @@ in {
 
   virtualisation.libvirtd.enable = true;
 
+ 	  environment.etc."containers/policy.json" = {
+	    mode="0644";
+	    text=''
+	      {
+	        "default": [
+	          {
+	            "type": "insecureAcceptAnything"
+	          }
+	        ],
+	        "transports":
+	          {
+	            "docker-daemon":
+	              {
+	                "": [{"type":"insecureAcceptAnything"}]
+	              }
+	          }
+	      }
+	    '';
+	  };
+
+	  environment.etc."containers/registries.conf" = {
+	    mode="0644";
+	    text=''
+	      [registries.search]
+	      registries = ['docker.io']
+	    '';
+	  };
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
