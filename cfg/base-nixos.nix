@@ -3,6 +3,7 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    manpages
     unzip
   ];
 }
