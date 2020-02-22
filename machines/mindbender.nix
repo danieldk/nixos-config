@@ -4,7 +4,8 @@
 
 { config, pkgs, ... }:
 
-{
+let linuxPackages = pkgs.linuxPackages_4_19;
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -17,6 +18,8 @@
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };
   };
+
+  boot.kernelPackages = linuxPackages;
 
   #boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
   boot.kernelParams = [
