@@ -79,6 +79,7 @@ in {
     enable = true;
     nssmdns = true;
   };
+  services.fstrim.enable = true;
   services.fwupd.enable = true;
   services.interception-tools.enable = true;
   services.openssh.enable = true;
