@@ -297,7 +297,11 @@ in {
   };
 
 
-  services.uwsgi = {
+  services.uwsgi = let
+    ljdekokMoinmoin = pkgs.python27Packages.moinmoin.overridePythonAttrs (attrs: {
+      doCheck = false;
+    });
+  in {
     enable = true;
     user = "nginx";
     group = "nginx";
@@ -309,20 +313,20 @@ in {
       vassals = {
         ljdekok = {
           type = "normal";
-          pythonPackages = self: with self; [ moinmoin ];
+          pythonPackages = self: with self; [ ljdekokMoinmoin ];
           master = true;
           socket = "/run/uwsgi/ljdekok.sock";
-          wsgi-file = "${pkgs.python27Packages.moinmoin}/share/moin/server/moin.wsgi";
+          wsgi-file = "${ljdekokMoinmoin}/share/moin/server/moin.wsgi";
           chdir = "/srv/www/ljdekok.org";
           plugins = [ "python2" ];
         };
 
         plantsulfur = {
           type = "normal";
-          pythonPackages = self: with self; [ moinmoin ];
+          pythonPackages = self: with self; [ ljdekokMoinmoin ];
           master = true;
           socket = "/run/uwsgi/plantsulfur.sock";
-          wsgi-file = "${pkgs.python27Packages.moinmoin}/share/moin/server/moin.wsgi";
+          wsgi-file = "${ljdekokMoinmoin}/share/moin/server/moin.wsgi";
           chdir = "/srv/www/plantsulfur.org";
           plugins = [ "python2" ];
         };
