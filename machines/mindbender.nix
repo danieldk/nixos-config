@@ -87,7 +87,14 @@ in {
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.hplip ];
   services.udev.extraRules = ''
+    # Solo Key
     SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="a2ca", TAG+="uaccess", MODE="0660", GROUP="plugdev" 
+
+    # Micro:Bit
+    ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", GROUP="plugdev"
+
+    # Jetvision ADS-B
+    ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP:="plugdev"
   '';
   services.zfs.autoScrub.enable = true;
   services.xserver.videoDrivers = [ "intel" ];
