@@ -63,6 +63,8 @@ in {
 
   nix = {
     buildCores = 4;
+    maxJobs = 4;
+    trustedUsers = [ "daniel" ];
     useSandbox = true;
   };
 
