@@ -11,7 +11,10 @@
       plasma5.enable = true;
     };
     displayManager = {
-      sddm.enable = true;
+      gdm = {
+        enable = true;
+        #enableHidpi = true;
+      };
     };
   };
 
