@@ -124,6 +124,13 @@
         root = "/storage/www/wordrepr.danieldk.eu";
       };
 
+      "zerogradient.dev" = {
+        serverName = "zerogradient.dev";
+        serverAliases = [ "www.zerogradient.dev" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/storage/www/www.zerogradient.dev";
+      };
 
       /*
       "s3.danieldk.eu" = {
@@ -206,6 +213,9 @@
         email = "me@danieldk.eu";
       };
 
+      "zerogradient.dev" = {
+        email = "me@danieldk.eu";
+      };
     };
   };
 
