@@ -26,6 +26,9 @@ in {
     # Limit maximum ARC size to 4GB
     "zfs.zfs_arc_max=4294967296"
   ];
+  boot.extraModprobeConfig = ''
+    options snd_hda_intel power_save=1
+  '';
   boot.kernel.sysctl = {
     "kernel.perf_event_paranoid" = 0;
   };
@@ -67,6 +70,8 @@ in {
     trustedUsers = [ "daniel" ];
     useSandbox = true;
   };
+
+  powerManagement.cpuFreqGovernor = "powersave";
 
   programs.bash.enableCompletion = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
