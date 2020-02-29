@@ -5,6 +5,8 @@
     ./base-desktop.nix
   ];
 
+  services.pipewire.enable = true;
+
   services.xserver = {
     enable = true;
     desktopManager = {
@@ -15,6 +17,8 @@
       gdm.wayland = true;
     };
   };
+
+  xdg.portal.enable = true;
 
   environment.systemPackages = with pkgs; with gnomeExtensions; [
     appindicator
