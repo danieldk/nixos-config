@@ -61,6 +61,7 @@ in {
   environment.systemPackages = with pkgs; [
     git
     git-crypt
+    linuxPackages.perf
     #nixops
   ];
 
