@@ -26,5 +26,6 @@
     workspace-matrix
     libappindicator-gtk2
     libappindicator-gtk3
+    (callPackage ./gnome3/switcher {})
   ];
 }
