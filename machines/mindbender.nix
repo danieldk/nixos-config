@@ -46,10 +46,13 @@ in {
   networking.hostName = "mindbender";
   networking.networkmanager.enable = false;
 
-  i18n = {
+  console = {
     # Bigger console font for 4k screen.
-    consoleFont = "latarcyrheb-sun32";
-    consoleKeyMap = "us";
+    font = "latarcyrheb-sun32";
+    keyMap = "us";
+  };
+
+  i18n = {
     defaultLocale = "en_US.UTF-8";
   };
 
