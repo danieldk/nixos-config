@@ -27,5 +27,6 @@
     libappindicator-gtk2
     libappindicator-gtk3
     (callPackage ./gnome3/switcher {})
+    gnome3.gnome-tweaks
   ];
 }
