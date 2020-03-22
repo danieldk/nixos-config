@@ -16,8 +16,8 @@ in {
         {
           scheme = "https";
           port = 443;
-          host = "ljdekok.org";
-          description = "Check whether ljdekok.org is reachable.";
+          host = "ljdekok.com";
+          description = "Check whether ljdekok.com is reachable.";
         }
       ];
     };
