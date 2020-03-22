@@ -186,8 +186,8 @@ in {
               include ${pkgs.nginx}/conf/uwsgi_params;
             '';
           };
-          "~ ^/wiki/(.*)" = {
-            alias = "/srv/www/ljdekok.org/htdocs/$1";
+          "/wiki/" = {
+            alias = "/srv/www/ljdekok.org/htdocs/";
           };
           "=/robots.txt" = {
             alias = "/srv/www/ljdekok.org/htdocs/robots.txt";
@@ -211,8 +211,8 @@ in {
               include ${pkgs.nginx}/conf/uwsgi_params;
             '';
           };
-          "~ ^/wiki/(.*)" = {
-            alias = "/srv/www/plantsulfur.org/htdocs/$1";
+          "/wiki/" = {
+            alias = "/srv/www/plantsulfur.org/htdocs/";
           };
           "=/robots.txt" = {
             alias = "/srv/www/plantsulfur.org/htdocs/robots.txt";
