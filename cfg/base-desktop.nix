@@ -15,6 +15,5 @@
   documentation.dev.enable = true;
 
   environment.systemPackages = [
-    pkgs.softmaker-office
   ];
 }

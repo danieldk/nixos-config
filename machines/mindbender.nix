@@ -65,6 +65,7 @@ in {
     git
     git-crypt
     linuxPackages.perf
+    softmaker-office
     #nixops
   ];
 
