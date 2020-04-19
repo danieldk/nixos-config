@@ -1,170 +1,85 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+{ lib, config, pkgs, ... }:
 
-{ config, pkgs, ... }:
-
-let linuxPackages = pkgs.linuxPackages_4_19;
+let
+  pwhash = import mindbender/pwhash.nix;
 in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../cfg/desktop-gnome3.nix
     ];
 
-  nixpkgs.config = {
-    allowUnfree = true;
-    packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
-  };
-
-  boot.kernelPackages = linuxPackages;
-
-  #boot.extraModulePackages = [ config.boot.kernelPackages.rtl8812au ];
-  boot.kernelParams = [
-    # Limit maximum ARC size to 4GB
-    "zfs.zfs_arc_max=4294967296"
-  ];
-  boot.extraModprobeConfig = ''
-    options snd_hda_intel power_save=1
-  '';
-  boot.kernel.sysctl = {
-    "kernel.perf_event_paranoid" = 0;
-  };
-
+  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true; 
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-  hardware.sane = {
-    enable = true;
-    extraBackends = [ pkgs.hplipWithPlugin ];
-  };
+  boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zfs rollback -r rpool/local/root@blank
+  '';
 
   networking.hostName = "mindbender";
-  networking.networkmanager.enable = false;
 
-  console = {
-    # Bigger console font for 4k screen.
-    font = "latarcyrheb-sun32";
-    keyMap = "us";
+  networking.useDHCP = false;
+  networking.interfaces.eno1.useDHCP = true;
+
+  nix = {
+    nixPath = [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+      "nixos-config=/home/daniel/git/nixos-config/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
   };
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
   };
 
-  # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    git
-    git-crypt
-    linuxPackages.perf
-    softmaker-office
-    #nixops
+  environment.shells = [
+    pkgs.bashInteractive
+    pkgs.zsh
   ];
 
-  nix = {
-    buildCores = 4;
-    maxJobs = 4;
-    trustedUsers = [ "daniel" ];
-    useSandbox = true;
-  };
+  environment.systemPackages = with pkgs; [
+     vim
+  ];
 
-  powerManagement.cpuFreqGovernor = "powersave";
-
-  programs.bash.enableCompletion = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-  programs.vim.defaultEditor = true;
-  programs.zsh.enable = true;
-  programs.zsh.enableCompletion = true;
-
-  # Services
-  services.avahi = {
+  services.openssh = {
     enable = true;
-    nssmdns = true;
+    hostKeys = [
+      {
+        path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+      {
+        path = "/persist/etc/ssh/ssh_host_rsa_key";
+        type = "rsa";
+        bits = 4096;
+      }
+    ];
   };
-  services.fstrim.enable = true;
-  services.fwupd.enable = true;
-  services.interception-tools.enable = true;
-  services.openssh.enable = true;
-  services.pcscd.enable = true;
-  services.printing.enable = true;
-  services.printing.drivers = [ pkgs.hplip ];
-  services.udev.extraRules = ''
-    # Solo Key
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="a2ca", TAG+="uaccess", MODE="0660", GROUP="plugdev" 
 
-    # Micro:Bit
-    ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", GROUP="plugdev"
-
-    # Jetvision ADS-B
-    ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP:="plugdev"
-  '';
-  services.zfs.autoScrub.enable = true;
-  services.xserver.videoDrivers = [ "intel" ];
-
-  # Open ports in the firewall.
-  networking.firewall = {
-    enable = true;
-    checkReversePath = false;
-    allowedTCPPorts = [ 22 ];
-    allowedUDPPorts = [ 5353 ];
-    allowedUDPPortRanges = [ { from = 32768; to = 61000; } ];
-  };
+  networking.hostId = "1f2b819c";
+  networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
-  # Hardware
-  sound.enable = true;
-  hardware.cpu.intel.updateMicrocode = true;
-  hardware.opengl = {
-    enable = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-      intel-media-driver
-      intel-ocl
-    ];
-  };
-  hardware.u2f.enable = true;
+  users = {
+    mutableUsers = false;
 
-  users.extraGroups.plugdev = { };
+    users.root.hashedPassword = pwhash.root;
 
-  users.extraUsers.daniel = {
-    createHome = true;
-    home = "/home/daniel";
-    shell = pkgs.zsh;
-    extraGroups = [ "wheel" "cdrom" "libvirtd" "video" "plugdev" "dialout" "scanner" ];
-    isNormalUser = true;
-    subGidRanges = [
-      {
-        count = 2048;
-        startGid = 100001;
-      }
-    ];
-    subUidRanges = [
-      {
-        count = 2048;
-        startUid = 100001;
-      }
-    ];
+    users.daniel = {
+      isNormalUser = true;
+      hashedPassword = pwhash.daniel;
+      extraGroups = [ "wheel" ];
+      shell = pkgs.zsh;
+    };
   };
 
-  virtualisation.libvirtd.enable = true;
+  systemd.tmpfiles.rules = [
+    "d /tmp 1777 root root -"
+  ];
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "20.03"; # Did you read the comment?
-
+  system.stateVersion = "20.03";
 }
+
