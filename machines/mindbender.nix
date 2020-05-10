@@ -16,6 +16,13 @@ in {
     zfs rollback -r rpool/local/root@blank
   '';
 
+  hardware = {
+    cpu.intel.updateMicrocode = true;
+    firmware = with pkgs; [
+      firmwareLinuxNonfree
+    ];
+  };
+
   networking.hostName = "mindbender";
 
   networking.useDHCP = false;
