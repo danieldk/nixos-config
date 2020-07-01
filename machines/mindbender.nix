@@ -2,11 +2,13 @@
 
 let
   pwhash = import mindbender/pwhash.nix;
+  impermanence = (import ../nix/sources.nix).impermanence;
 in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../cfg/desktop-gnome3.nix
+      (import "${impermanence}/nixos.nix")
     ];
 
   boot = {
@@ -33,6 +35,24 @@ in {
   };
 
   environment = {
+    persistence."/persist" = {
+      directories = [
+        "/etc/NetworkManager"
+        "/etc/ssh"
+        "/var/lib/bluetooth"
+        "/var/lib/boltd"
+        "/var/lib/fwupd"
+        "/var/lib/cups"
+        "/var/lib/docker"
+        "/var/lib/libvirt"
+        "/var/lib/NetworkManager"
+        "/var/log"
+      ];
+      files = [
+        "/etc/machine-id"
+      ];
+    };
+
     shells = [
       pkgs.bashInteractive
       pkgs.zsh
@@ -45,6 +65,11 @@ in {
       softmaker-office
     ];
   };
+
+  etc."NetworkManager/system-connections" = {
+    source = "/persist/etc/NetworkManager/system-connections/";
+  };
+}
 
   hardware = {
     cpu.intel.updateMicrocode = true;
@@ -138,17 +163,6 @@ in {
 
     openssh = {
       enable = true;
-      hostKeys = [
-        {
-          path = "/persist/etc/ssh/ssh_host_ed25519_key";
-          type = "ed25519";
-        }
-        {
-          path = "/persist/etc/ssh/ssh_host_rsa_key";
-          type = "rsa";
-          bits = 4096;
-        }
-      ];
     };
 
     pcscd.enable = true;
@@ -174,6 +188,10 @@ in {
   };
 
   sound.enable = true;
+
+  systemd.tmpfiles.rules = [
+    "L /etc/ipsec.secrets - - - - /etc/ipsec.d/ipsec.nm-l2tp.secrets"
+  ];
 
   users = {
     mutableUsers = false;
@@ -202,9 +220,6 @@ in {
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "d /tmp 1777 root root -"
-  ];
 
   virtualisation.libvirtd.enable = true;
 
