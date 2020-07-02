@@ -4,8 +4,8 @@ let
   pwhash = import mindbender/pwhash.nix;
   sources = import ../nix/sources.nix;
 in {
-  imports =
-    [ # Include the results of the hardware scan.
+  imports = [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../cfg/desktop-gnome3.nix
       (import "${sources.dwarffs}/module.nix")
@@ -189,7 +189,6 @@ in {
     xserver.videoDrivers = [ "intel" ];
   };
 
-  sound.enable = true;
   systemd.services.display-manager.restartIfChanged = false;
 
   systemd.tmpfiles.rules = [
