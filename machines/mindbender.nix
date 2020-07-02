@@ -115,9 +115,8 @@ in {
     };
 
     hostName = "mindbender";
-    networkmanager.enable = false;
+    networkmanager.enable = true;
     useDHCP = false;
-    interfaces.eno1.useDHCP = true;
   };
 
   nix = {
