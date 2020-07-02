@@ -205,7 +205,7 @@ in {
     users.daniel = {
       isNormalUser = true;
       hashedPassword = pwhash.daniel;
-      extraGroups = [ "wheel" "cdrom" "libvirtd" "video" "plugdev" "dialout" "scanner" ];
+      extraGroups = [ "wheel" "audio" "cdrom" "docker" "libvirtd" "video" "plugdev" "dialout" "scanner" ];
       shell = pkgs.zsh;
       subGidRanges = [
         {
@@ -222,8 +222,10 @@ in {
     };
   };
 
-
-  virtualisation.libvirtd.enable = true;
+  virtualisation = {
+    docker.enable = true;
+    libvirtd.enable = true;
+  };
 
   system.stateVersion = "20.03";
 }
