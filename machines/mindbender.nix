@@ -97,8 +97,6 @@ in {
       enable = true;
       extraBackends = [ pkgs.hplipWithPlugin ];
     };
-
-    u2f.enable = true;
   };
 
   i18n = {
