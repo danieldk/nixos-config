@@ -12,6 +12,8 @@ in {
     ];
 
   boot = {
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
+
     extraModprobeConfig = ''
       options snd_hda_intel power_save=1
     '';
