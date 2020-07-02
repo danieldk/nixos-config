@@ -111,6 +111,7 @@ in {
       allowedTCPPorts = [ 22 ];
       allowedUDPPorts = [ 5353 ];
       allowedUDPPortRanges = [ { from = 32768; to = 61000; } ];
+      logRefusedConnections = false;
     };
 
     hostName = "mindbender";
