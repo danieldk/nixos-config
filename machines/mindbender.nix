@@ -190,6 +190,7 @@ in {
   };
 
   sound.enable = true;
+  systemd.services.display-manager.restartIfChanged = false;
 
   systemd.tmpfiles.rules = [
     "L /etc/ipsec.secrets - - - - /etc/ipsec.d/ipsec.nm-l2tp.secrets"
