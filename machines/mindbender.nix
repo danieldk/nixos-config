@@ -2,13 +2,14 @@
 
 let
   pwhash = import mindbender/pwhash.nix;
-  impermanence = (import ../nix/sources.nix).impermanence;
+  sources = import ../nix/sources.nix;
 in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../cfg/desktop-gnome3.nix
-      (import "${impermanence}/nixos.nix")
+      (import "${sources.dwarffs}/module.nix")
+      (import "${sources.impermanence}/nixos.nix")
     ];
 
   boot = {
