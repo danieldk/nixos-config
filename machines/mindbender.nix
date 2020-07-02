@@ -86,6 +86,12 @@ in {
         intel-media-driver
         intel-ocl
       ];
+      extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+    };
+
+    pulseaudio = {
+      enable = true;
+      support32Bit = true;
     };
 
     sane = {
