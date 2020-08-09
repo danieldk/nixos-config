@@ -15,10 +15,6 @@ in {
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-    extraModprobeConfig = ''
-      options snd_hda_intel power_save=1
-    '';
-
     initrd.postDeviceCommands = lib.mkAfter ''
       zfs rollback -r rpool/local/root@blank
     '';
@@ -26,6 +22,8 @@ in {
     kernel.sysctl = {
       "kernel.perf_event_paranoid" = 0;
     };
+
+    kernelPackages = pkgs.linuxPackages_latest;
 
     kernelParams = [
       # Limit maximum ARC size to 4GB
@@ -70,7 +68,7 @@ in {
   };
 
   hardware = {
-    cpu.intel.updateMicrocode = true;
+    cpu.amd.updateMicrocode = true;
 
     firmware = with pkgs; [
       firmwareLinuxNonfree
@@ -80,11 +78,11 @@ in {
       enable = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        vaapiIntel
-        vaapiVdpau
+        #amdvlk
         libvdpau-va-gl
-        intel-media-driver
-        intel-ocl
+        rocm-opencl-icd
+        rocm-runtime-ext
+        vaapiVdpau
       ];
       extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
     };
@@ -120,8 +118,8 @@ in {
   };
 
   nix = {
-    buildCores = 4;
-    maxJobs = 4;
+    buildCores = 16;
+    maxJobs = 8;
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
       "nixos-config=/home/daniel/git/nixos-config/configuration.nix"
@@ -143,7 +141,7 @@ in {
 
   time.timeZone = "Europe/Amsterdam";
 
-  powerManagement.cpuFreqGovernor = "powersave";
+  powerManagement.cpuFreqGovernor = "ondemand";
 
   programs = {
     bash.enableCompletion = true;
@@ -186,7 +184,7 @@ in {
     '';
 
     zfs.autoScrub.enable = true;
-    xserver.videoDrivers = [ "intel" ];
+    xserver.videoDrivers = [ "amdgpu" ];
   };
 
   systemd.services.display-manager.restartIfChanged = false;
