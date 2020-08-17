@@ -2,11 +2,9 @@
 
 let
   pwhash = import mindbender/pwhash.nix;
-  sources = import ../nix/sources.nix;
 in {
   imports = [
       ../cfg/desktop-gnome3.nix
-      (import "${sources.impermanence}/nixos.nix")
     ];
 
   boot = {
