@@ -5,8 +5,6 @@ let
   sources = import ../nix/sources.nix;
 in {
   imports = [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
       ../cfg/desktop-gnome3.nix
       (import "${sources.dwarffs}/module.nix")
       (import "${sources.impermanence}/nixos.nix")
@@ -15,13 +13,19 @@ in {
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-    initrd.postDeviceCommands = lib.mkAfter ''
-      zfs rollback -r rpool/local/root@blank
-    '';
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+
+      postDeviceCommands = lib.mkAfter ''
+        zfs rollback -r rpool/local/root@blank
+      '';
+    };
 
     kernel.sysctl = {
       "kernel.perf_event_paranoid" = 0;
     };
+
+    kernelModules = [ "kvm-amd" ];
 
     kernelPackages = pkgs.linuxPackages_latest;
 
@@ -34,6 +38,8 @@ in {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
+
+  console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   environment = {
     persistence."/persist" = {
@@ -67,8 +73,40 @@ in {
     ];
   };
 
+  fileSystems."/" =
+    { device = "rpool/local/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/B2FB-B410";
+      fsType = "vfat";
+    };
+
+  fileSystems."/nix" =
+    { device = "rpool/local/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home" =
+    { device = "rpool/safe/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/persist" =
+    { device = "rpool/safe/persist";
+      fsType = "zfs";
+      neededForBoot = true;
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/c42c89b9-2efc-4688-8a03-1ef12b1a0fef"; }
+    ];
+
   hardware = {
     cpu.amd.updateMicrocode = true;
+
+    enableRedistributableFirmware = true;
 
     firmware = with pkgs; [
       firmwareLinuxNonfree
@@ -112,12 +150,14 @@ in {
       logRefusedConnections = false;
     };
 
+    hostId = "353884b8";
     hostName = "mindbender";
     networkmanager.enable = true;
     useDHCP = false;
   };
 
   nix = {
+    package = pkgs.nixUnstable;
     buildCores = 16;
     maxJobs = 8;
     nixPath = [
@@ -127,6 +167,9 @@ in {
     ];
     trustedUsers = [ "daniel" ];
     useSandbox = true;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
   };
 
   nixpkgs = {
@@ -163,6 +206,7 @@ in {
 
     openssh = {
       enable = true;
+      forwardX11 = true;
     };
 
     pcscd.enable = true;
