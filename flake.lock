@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "dwarffs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1585848904,
+        "narHash": "sha256-sTX1/DU4lxaHYFapf1hvTir799effD9mUW7l2+3azqU=",
+        "owner": "edolstra",
+        "repo": "dwarffs",
+        "rev": "83c13981993fa54c4cac230f2eec7241ab8fd0a9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "dwarffs",
+        "rev": "83c13981993fa54c4cac230f2eec7241ab8fd0a9",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1597596130,
@@ -18,6 +39,7 @@
     },
     "root": {
       "inputs": {
+        "dwarffs": "dwarffs",
         "nixpkgs": "nixpkgs"
       }
     }

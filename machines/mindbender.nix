@@ -6,7 +6,6 @@ let
 in {
   imports = [
       ../cfg/desktop-gnome3.nix
-      (import "${sources.dwarffs}/module.nix")
       (import "${sources.impermanence}/nixos.nix")
     ];
 

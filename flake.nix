@@ -1,10 +1,19 @@
 {
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs-channels/nixos-unstable";
+  inputs = {
+    dwarffs = {
+      url = "github:edolstra/dwarffs/83c13981993fa54c4cac230f2eec7241ab8fd0a9";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixpkgs.url = "github:NixOS/nixpkgs-channels/nixos-unstable";
+  };
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, dwarffs, nixpkgs }: {
     nixosConfigurations.mindbender = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ machines/mindbender.nix ];
+      modules = [
+        dwarffs.nixosModules.dwarffs
+        machines/mindbender.nix
+      ];
     };
   };
 }

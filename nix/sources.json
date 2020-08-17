@@ -1,16 +1,4 @@
 {
-    "dwarffs": {
-        "branch": "531a2338101f0b6db2d9d512c3f98145f7b75397",
-        "description": "A FUSE filesystem that allows tools like gdb to look up debug info files via HTTP",
-        "homepage": "",
-        "owner": "edolstra",
-        "repo": "dwarffs",
-        "rev": "531a2338101f0b6db2d9d512c3f98145f7b75397",
-        "sha256": "0ipjz3l3j4c51944mmk9gw60h24m8vba7gc3bbdcs1gssazx5zkv",
-        "type": "tarball",
-        "url": "https://github.com/edolstra/dwarffs/archive/531a2338101f0b6db2d9d512c3f98145f7b75397.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "impermanence": {
         "branch": "master",
         "description": "Modules to help you handle persistent state on systems with ephemeral root storage [maintainer=@talyz]",
