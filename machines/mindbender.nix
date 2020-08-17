@@ -218,13 +218,15 @@ in {
 
     udev.extraRules = ''
       # Solo Key
-      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="a2ca", TAG+="uaccess", MODE="0660", GROUP="plugdev" 
+      SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="a2ca", TAG+="uaccess"
 
       # Micro:Bit
       ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", GROUP="plugdev"
 
       # Jetvision ADS-B
       ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP:="plugdev"
+
+      SUBSYSTEM=="usb", ATTR{idVendor}=="2516", ATTR{idProduct}=="0051", TAG+="uaccess"
     '';
 
     zfs.autoScrub.enable = true;
