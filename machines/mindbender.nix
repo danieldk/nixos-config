@@ -116,7 +116,6 @@ in {
         #amdvlk
         libvdpau-va-gl
         rocm-opencl-icd
-        rocm-runtime-ext
         vaapiVdpau
       ];
       extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];

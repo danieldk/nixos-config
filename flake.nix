@@ -8,7 +8,7 @@
       url = "github:danieldk/impermanence/flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:NixOS/nixpkgs-channels/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs-channels/nixos-unstable-small";
   };
 
   outputs = { self, dwarffs, impermanence, nixpkgs }: {
