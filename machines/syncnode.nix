@@ -86,6 +86,13 @@
         root = "/storage/www/blob.danieldk.eu";
       };
 
+      "cache.tensordot.com" = {
+        serverName = "cache.tensordot.com";
+        forceSSL = true;
+        enableACME = true;
+        root = "/storage/www/cache.tensordot.com";
+      };
+
       "danieldk.eu" = {
         serverName = "danieldk.eu";
         serverAliases = [ "www.danieldk.eu" ];
@@ -117,19 +124,19 @@
         root = "/storage/www/rustdoc.danieldk.eu";
       };
 
+      "tensordot.com" = {
+        serverName = "tensordot.com";
+        serverAliases = [ "www.tensordot.com" ];
+        forceSSL = true;
+        enableACME = true;
+        root = "/storage/www/www.tensordot.com";
+      };
+
       "wordrepr.danieldk.eu" = {
         serverName = "wordrepr.danieldk.eu";
         forceSSL = true;
         enableACME = true;
         root = "/storage/www/wordrepr.danieldk.eu";
-      };
-
-      "zerogradient.dev" = {
-        serverName = "zerogradient.dev";
-        serverAliases = [ "www.zerogradient.dev" ];
-        forceSSL = true;
-        enableACME = true;
-        root = "/storage/www/www.zerogradient.dev";
       };
 
       /*
@@ -192,6 +199,10 @@
         email = "me@danieldk.eu";
       };
 
+      "cache.tensordot.com" = {
+        email = "me@danieldk.eu";
+      };
+
       "danieldk.eu" = {
         extraDomains = { "www.danieldk.eu" = null; };
         email = "me@danieldk.eu";
@@ -205,15 +216,15 @@
         email = "me@danieldk.eu";
       };
 
+      "tensordot.com" = {
+        email = "me@danieldk.eu";
+      };
+
       "rustdoc.danieldk.eu" = {
         email = "me@danieldk.eu";
       };
 
       "wordrepr.danieldk.eu" = {
-        email = "me@danieldk.eu";
-      };
-
-      "zerogradient.dev" = {
         email = "me@danieldk.eu";
       };
     };
