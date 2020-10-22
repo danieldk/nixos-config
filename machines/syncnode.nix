@@ -172,6 +172,7 @@
     enable = true;
     enableWebUI = true;
     deviceName = "syncnode";
+    httpListenPort = 10000;
     listeningPort = 44444;
     useUpnp = false;
   };
