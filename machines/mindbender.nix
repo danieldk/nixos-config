@@ -161,7 +161,6 @@ in {
   };
 
   nix = {
-    package = pkgs.nixUnstable;
     buildCores = 16;
     maxJobs = 8;
     nixPath = [
@@ -171,9 +170,6 @@ in {
     ];
     trustedUsers = [ "daniel" ];
     useSandbox = true;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
   };
 
   nixpkgs = {
