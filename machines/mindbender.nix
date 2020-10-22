@@ -260,18 +260,6 @@ in {
         hashedPassword = pwhash.daniel;
         extraGroups = [ "wheel" "audio" "cdrom" "docker" "libvirtd" "video" "plugdev" "dialout" "scanner" ];
         shell = pkgs.zsh;
-        subGidRanges = [
-          {
-            count = 2048;
-            startGid = 100001;
-          }
-        ];
-        subUidRanges = [
-          {
-            count = 2048;
-            startUid = 100001;
-          }
-        ];
       };
 
       reviewer = {
