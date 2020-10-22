@@ -69,7 +69,13 @@ in {
       git
       git-crypt
       linuxPackages.perf
-      softmaker-office
+      (softmaker-office.override {
+        officeVersion = {
+          edition = "2018";
+          version = "978";
+          sha256 = "14qnlbczq1zcz24vwy2yprdvhyn6bxv1nc1w6vjyq8w5jlwqsgbr";
+        };
+      })
     ];
   };
 
