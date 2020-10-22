@@ -193,6 +193,8 @@
       address = "fe80::1";
       interface = "ens3";
     };
+
+    hostName = "syncnode";
   };
 
   security = {
