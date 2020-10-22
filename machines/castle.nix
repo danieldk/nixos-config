@@ -81,6 +81,8 @@ in {
     allowedUDPPorts = [ 8883 ];
   };
 
+  networking.hostName = "castle";
+
   security = {
     acme.acceptTerms = true;
     hideProcessInformation = true;
