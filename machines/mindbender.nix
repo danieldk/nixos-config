@@ -36,7 +36,7 @@ in {
     loader.efi.canTouchEfiVariables = true;
   };
 
-  console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+  #console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   environment = {
     persistence."/persist" = {
