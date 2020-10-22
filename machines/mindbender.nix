@@ -119,13 +119,12 @@ in {
       enable = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        #amdvlk
-        libvdpau-va-gl
-        rocm-opencl-icd
         vaapiVdpau
       ];
       extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
     };
+
+    #nvidia.modesetting.enable = true;
 
     pulseaudio = {
       enable = true;
@@ -232,7 +231,14 @@ in {
     '';
 
     zfs.autoScrub.enable = true;
-    xserver.videoDrivers = [ "amdgpu" ];
+    xserver = {
+      libinput = {
+        enable = true;
+        scrollButton = 8;
+      };
+      videoDrivers = [ "nvidia" ];
+    };
+    #xserver.displayManager.gdm.nvidiaWayland = true;
   };
 
   systemd.services.display-manager.restartIfChanged = false;
