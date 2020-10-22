@@ -58,14 +58,12 @@
     permitRootLogin = "yes";
   };
 
-  /*
   services.minio = {
     enable = true;
     dataDir = "/storage/minio/data";
     configDir = "/storage/minio/config";
-    listenAddress = "127.0.0.1:10000";
+    listenAddress = "127.0.0.1:9000";
   };
-  */
 
   services.nginx = {
     enable = true;
@@ -139,26 +137,34 @@
         root = "/storage/www/wordrepr.danieldk.eu";
       };
 
-      /*
-      "s3.danieldk.eu" = {
-        serverName = "s3.danieldk.eu";
+      "s3.tensordot.com" = {
+        serverName = "s3.tensordot.com";
         forceSSL = true;
         enableACME = true;
 
-
         extraConfig = ''
-          #ignore_invalid_headers = off;
+          ignore_invalid_headers off;
           client_max_body_size 200m;
           proxy_buffering off;
         '';
 
         locations = {
           "/" = {
-            proxyPass = "http://127.0.0.1:10000";
+            proxyPass = "http://127.0.0.1:9000";
+            extraConfig = ''
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header Host $host;
+
+              proxy_connect_timeout 300;
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+              chunked_transfer_encoding off;
+            '';
           };
         };
       };
-      */
     };
   };
 
@@ -204,7 +210,7 @@
       };
 
       "danieldk.eu" = {
-        extraDomains = { "www.danieldk.eu" = null; };
+        extraDomainNames = [ "www.danieldk.eu" ];
         email = "me@danieldk.eu";
       };
 
@@ -221,6 +227,10 @@
       };
 
       "rustdoc.danieldk.eu" = {
+        email = "me@danieldk.eu";
+      };
+
+      "s3.tensordot.com" = {
         email = "me@danieldk.eu";
       };
 
