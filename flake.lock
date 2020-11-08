@@ -21,27 +21,6 @@
         "type": "github"
       }
     },
-    "impermanence": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1597682528,
-        "narHash": "sha256-/4xS7OLyImVJt+J9kDBVaiWESJ6UlDvT3BR5SeZc0RA=",
-        "owner": "danieldk",
-        "repo": "impermanence",
-        "rev": "7ebaa22a3adf53b9dec43a98a83caeaa2adb8f65",
-        "type": "github"
-      },
-      "original": {
-        "owner": "danieldk",
-        "ref": "flake",
-        "repo": "impermanence",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1598176412,
@@ -61,7 +40,6 @@
     "root": {
       "inputs": {
         "dwarffs": "dwarffs",
-        "impermanence": "impermanence",
         "nixpkgs": "nixpkgs"
       }
     }

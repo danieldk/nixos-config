@@ -11,11 +11,9 @@ in {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+      availableKernelModules = [ "nvme" "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" ];
 
-      postDeviceCommands = lib.mkAfter ''
-        zfs rollback -r rpool/local/root@blank
-      '';
+      luks.devices."cryptRoot".device = "/dev/disk/by-uuid/8bc18122-0d82-47f3-b116-f47ae8f2a809";
     };
 
     kernel.sysctl = {
@@ -24,12 +22,7 @@ in {
 
     kernelModules = [ "kvm-amd" ];
 
-    kernelPackages = pkgs.linuxPackages_latest;
-
-    kernelParams = [
-      # Limit maximum ARC size to 4GB
-      "zfs.zfs_arc_max=4294967296"
-    ];
+    kernelPackages = pkgs.linuxPackages_5_8;
 
     # Use the systemd-boot EFI boot loader.
     loader.systemd-boot.enable = true;
@@ -39,24 +32,6 @@ in {
   #console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   environment = {
-    persistence."/persist" = {
-      directories = [
-        "/etc/NetworkManager"
-        "/etc/ssh"
-        "/var/lib/bluetooth"
-        "/var/lib/boltd"
-        "/var/lib/fwupd"
-        "/var/lib/cups"
-        "/var/lib/docker"
-        "/var/lib/libvirt"
-        "/var/lib/NetworkManager"
-        "/var/log"
-      ];
-      files = [
-        "/etc/machine-id"
-      ];
-    };
-
     shells = [
       pkgs.bashInteractive
       pkgs.zsh
@@ -77,34 +52,31 @@ in {
   };
 
   fileSystems."/" =
-    { device = "rpool/local/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B2FB-B410";
-      fsType = "vfat";
-    };
-
-  fileSystems."/nix" =
-    { device = "rpool/local/nix";
-      fsType = "zfs";
+    { device = "/dev/mapper/cryptRoot";
+      fsType = "btrfs";
+      options = [ "subvol=root" ];
     };
 
   fileSystems."/home" =
-    { device = "rpool/safe/home";
-      fsType = "zfs";
+    { device = "/dev/mapper/cryptRoot";
+      fsType = "btrfs";
+      options = [ "subvol=home" ];
     };
 
-  fileSystems."/persist" =
-    { device = "rpool/safe/persist";
-      fsType = "zfs";
-      neededForBoot = true;
+  fileSystems."/nix" =
+    { device = "/dev/mapper/cryptRoot";
+      fsType = "btrfs";
+      options = [ "subvol=nix" ];
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/c42c89b9-2efc-4688-8a03-1ef12b1a0fef"; }
-    ];
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/90A9-9D72";
+      fsType = "vfat";
+    };
+
+  swapDevices = [
+    { device = "/dev/disk/by-uuid/2c19a6ca-d115-4851-b97c-7b9aeb909fc0"; }
+  ];
 
   hardware = {
     cpu.amd.updateMicrocode = true;
@@ -161,11 +133,6 @@ in {
     package = pkgs.nixUnstable;
     buildCores = 16;
     maxJobs = 8;
-    nixPath = [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "nixos-config=/home/daniel/git/nixos-config/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
     trustedUsers = [ "daniel" ];
     useSandbox = true;
     extraOptions = ''
@@ -230,7 +197,6 @@ in {
       SUBSYSTEM=="usb", ATTR{idVendor}=="2516", ATTR{idProduct}=="0051", TAG+="uaccess"
     '';
 
-    zfs.autoScrub.enable = true;
     xserver = {
       libinput = {
         enable = true;
@@ -238,7 +204,6 @@ in {
       };
       videoDrivers = [ "nvidia" ];
     };
-    #xserver.displayManager.gdm.nvidiaWayland = true;
   };
 
   systemd.services.display-manager.restartIfChanged = false;
@@ -248,16 +213,11 @@ in {
   ];
 
   users = {
-    mutableUsers = false;
-
     extraGroups.plugdev = { };
-
-    users.root.hashedPassword = pwhash.root;
 
     users = {
       daniel = {
         isNormalUser = true;
-        hashedPassword = pwhash.daniel;
         extraGroups = [ "wheel" "audio" "cdrom" "docker" "libvirtd" "video" "plugdev" "dialout" "scanner" ];
         shell = pkgs.zsh;
       };
@@ -274,6 +234,6 @@ in {
     libvirtd.enable = true;
   };
 
-  system.stateVersion = "20.03";
+  system.stateVersion = "20.09";
 }
 
